@@ -1,1 +1,116 @@
-/* css styles */
+/* === 暗黑极客风格 (Dark Geek Theme) === */
+
+:root {
+    --geek-bg: #0d1117;
+    /* 深邃黑灰背景 (GitHub Dark 同款) */
+    --geek-card: #161b22;
+    /* 卡片与代码块背景 */
+    --geek-border: #30363d;
+    /* 极细暗色边框 */
+    --geek-text: #e6edf3;
+    /* 柔和亮白正文 */
+    --geek-muted: #8b949e;
+    /* 次要文字灰 */
+    --geek-accent: #38bdf8;
+    /* 赛博电光青 (主强调色) */
+    --geek-green: #3fb950;
+    /* 终端绿 (辅助强调色) */
+}
+
+/* 1. 全局背景与字体 */
+body {
+    background-color: var(--geek-bg);
+    color: var(--geek-text);
+    font-family: -apple-system, BlinkMacSystemFont, "Inter", "PingFang SC", "Microsoft YaHei", sans-serif;
+    line-height: 1.75;
+}
+
+/* 2. 顶部导航栏：毛玻璃暗黑质感 */
+.navbar {
+    background-color: rgba(13, 17, 23, 0.85) !important;
+    backdrop-filter: blur(10px);
+    border-bottom: 1px solid var(--geek-border);
+}
+
+.navbar-brand {
+    font-family: "JetBrains Mono", "Fira Code", Consolas, monospace;
+    font-weight: 700;
+    color: var(--geek-accent) !important;
+    letter-spacing: -0.5px;
+}
+
+/* 给博客标题加一个终端命令提示符 >_ */
+.navbar-brand::before {
+    content: ">_ ";
+    color: var(--geek-green);
+}
+
+/* 3. 链接与悬停效果 */
+a {
+    color: var(--geek-accent);
+    text-decoration: none;
+    transition: all 0.2s ease;
+}
+
+a:hover {
+    color: #7dd3fc;
+    text-shadow: 0 0 8px rgba(56, 189, 248, 0.4);
+}
+
+/* 4. 文章列表卡片（首页） */
+.quarto-post,
+.card {
+    background-color: var(--geek-card) !important;
+    border: 1px solid var(--geek-border) !important;
+    border-radius: 10px;
+    padding: 1.2rem;
+    margin-bottom: 1.2rem;
+    transition: transform 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.quarto-post:hover,
+.card:hover {
+    transform: translateY(-2px);
+    border-color: var(--geek-accent) !important;
+    box-shadow: 0 4px 20px rgba(56, 189, 248, 0.12);
+}
+
+/* 5. 分类标签 (Categories) 终端化 */
+.quarto-category {
+    font-family: "JetBrains Mono", "Fira Code", Consolas, monospace;
+    font-size: 0.78rem;
+    background-color: rgba(56, 189, 248, 0.1) !important;
+    color: var(--geek-accent) !important;
+    border: 1px solid rgba(56, 189, 248, 0.3) !important;
+    border-radius: 6px;
+}
+
+/* 6. 代码块与行内代码 */
+pre.sourceCode,
+div.sourceCode {
+    background-color: var(--geek-card) !important;
+    border: 1px solid var(--geek-border) !important;
+    border-radius: 8px;
+}
+
+code:not(.sourceCode) {
+    font-family: "JetBrains Mono", "Fira Code", Consolas, monospace;
+    background-color: rgba(110, 118, 129, 0.25);
+    color: #79c0ff;
+    padding: 0.15em 0.4em;
+    border-radius: 4px;
+    font-size: 0.88em;
+}
+
+/* 7. 文章内图片：暗色微光边框 */
+img {
+    border-radius: 8px;
+    border: 1px solid var(--geek-border);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
+}
+
+/* 8. 右侧目录 (TOC) 高亮 */
+.sidebar nav[role="doc-toc"] ul>li>a.active {
+    color: var(--geek-accent) !important;
+    border-left: 2px solid var(--geek-accent) !important;
+}
