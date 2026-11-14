@@ -114,3 +114,12 @@ img {
     color: var(--geek-accent) !important;
     border-left: 2px solid var(--geek-accent) !important;
 }
+
+/* 让顶部博客标题在电脑端居中显示 */
+@media (min-width: 992px) {
+    .navbar .navbar-brand {
+        position: absolute;
+        left: 50%;
+        transform: translateX(-50%);
+    }
+}
