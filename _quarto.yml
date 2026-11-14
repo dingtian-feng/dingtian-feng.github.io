@@ -1,23 +1,29 @@
 project:
   type: website
 
+lang: zh 
+
 website:
   description: "A blog built with Quarto"
-  site-url: https://your-website-url.example.com # you must change this appropriately for RSS feeds to work properly
+  site-url: https://dingtian-feng.github.io
   title: "Dingtian's Notes"
+  favicon: favicon.svg 
   navbar:
     right:
       - about.qmd
       - icon: github
-        href: https://github.com/
-      - icon: bluesky
-        href: https://bsky.app/
+        href: https://github.com/dingtian-feng
+      - text: 知乎                              # 改用文字显示
+        href: https://www.zhihu.com/people/feng-ding-tian
+      - icon: rss                              # 新增 RSS 图标
+        href: index.xml
+
 format:
   html:
-    theme:
-      - cosmo
-      - brand
+    theme: darkly
     css: styles.css
+    toc: true
+    highlight-style: dracula
 
-
-
+execute:
+  freeze: auto
