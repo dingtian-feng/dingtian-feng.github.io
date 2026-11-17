@@ -1,5 +1,6 @@
 ---
 title: "开博：从这里开始记录"
+description: "本站的起点：记录 CS 与 AI 的学习笔记、论文精读和工程实践。"
 date: "2026-11-15"
 categories: [notes, ai]
 ---
