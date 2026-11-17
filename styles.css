@@ -60,15 +60,15 @@ body {
   vertical-align: 0.3em;
 }
 .sr-only {
-  position: absolute;
-  width: 1px;
-  height: 1px;
-  padding: 0;
-  margin: -1px;
-  overflow: hidden;
-  clip: rect(0, 0, 0, 0);
-  white-space: nowrap;
-  border: 0;
+  position: absolute !important;
+  width: 1px !important;
+  height: 1px !important;
+  padding: 0 !important;
+  margin: -1px !important;
+  overflow: hidden !important;
+  clip: rect(0, 0, 0, 0) !important;
+  white-space: nowrap !important;
+  border: 0 !important;
 }
 .agi-hero {
   display: flex;
@@ -80,15 +80,10 @@ body {
   font-family: var(--mono);
   user-select: none;
 }
-.agi-sign {
-  width: 148px;
-  height: auto;
-  display: block;
-  margin-bottom: 0.4rem;
-}
+.agi-sign { width: 148px; height: auto; display: block; margin-bottom: 0.4rem; }
 .agi-sign path {
-  fill: #8b4cf0;
-  fill-rule: evenodd;
+  fill: #8b4cf0 !important;
+  fill-rule: nonzero !important;
   filter: drop-shadow(0 0 7px rgba(139, 76, 240, 0.55));
 }
 .agi-sign-sub {

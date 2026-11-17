@@ -11,15 +11,14 @@ listing:
   filter-ui: false
 ---
 
-<h1 class="agi-hero">
-  <span class="sr-only">Dingtian's Notes</span>
-  <svg class="agi-sign" viewBox="0 0 260 92" role="img" aria-label="AGI — Artificial General Intelligence">
-    <g transform="translate(20 0) skewX(-8)">
-      <path d="M6 78 L44 14 H58 L20 78 Z" />
-      <path d="M50 14 H64 L102 78 H88 Z" />
-      <path d="M28 52 H80 L76 64 H32 Z" />
-      <path d="M116 14 H196 V30 H134 V62 H162 V50 H150 V38 H182 V78 H116 Z" />
-      <path d="M212 14 H236 L228 78 H204 Z" />
+<h1 class="agi-hero" aria-label="Dingtian's Notes — AGI">
+  <svg class="agi-sign" viewBox="0 0 300 100" role="img" aria-label="AGI">
+    <g transform="translate(10 0) skewX(-8)">
+      <path d="M4 80 L42 16 H58 L20 80 Z" />
+      <path d="M50 16 H66 L104 80 H88 Z" />
+      <path d="M26 54 H82 L78 68 H30 Z" />
+      <path d="M120 16 H206 V32 H138 V64 H168 V52 H154 V40 H188 V80 H120 Z" />
+      <path d="M218 16 H244 L234 80 H208 Z" />
     </g>
   </svg>
   <span class="agi-sign-sub">ARTIFICIAL GENERAL INTELLIGENCE</span>
