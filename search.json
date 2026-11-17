@@ -1,0 +1,23 @@
+[
+  {
+    "objectID": "posts/hello/index.html",
+    "href": "posts/hello/index.html",
+    "title": "开博：从这里开始记录",
+    "section": "",
+    "text": "2026-11-15\n\n\n\n这个站点用来记录技术探索、论文精读、工程踩坑以及日常思考。写在最前面，先交代一下关注的方向和常用的工具。\n关注领域\n\n大模型与 NLP：Transformer 架构、LLM 微调与推理优化\nAI 工程化：PyTorch、Agent 应用开发\nCS 基础：算法、系统架构与开源工具\n\n常用技术栈\nPython / PyTorch / Git / Linux / VS Code\n多数笔记会从一段代码开始。比如一个最小的张量运算：\nimport torch\n\nx = torch.tensor([1.0, 2.0, 3.0])\nprint(x.mean())\n以后每篇文章尽量保持短，讲清一件事就好。"
+  },
+  {
+    "objectID": "about.html",
+    "href": "about.html",
+    "title": "关于我",
+    "section": "",
+    "text": "你好，我是 Dingtian，一名专注于计算机科学（CS）与人工智能（AI）的学习者 / 开发者。\n这里用来记录技术探索、论文精读、工程踩坑以及日常思考。\n关注领域\n\n大模型与 NLP：Transformer 架构、LLM 微调与推理优化\nAI 工程化：PyTorch、Agent 应用开发\nCS 基础：算法、系统架构与开源工具\n\n常用技术栈\nPython / PyTorch / Git / Linux / VS Code\n\ngithub 知乎 email"
+  },
+  {
+    "objectID": "index.html",
+    "href": "index.html",
+    "title": "\nDingtian’s Notes          ARTIFICIAL GENERAL INTELLIGENCE\n",
+    "section": "",
+    "text": "Dingtian’s Notes          ARTIFICIAL GENERAL INTELLIGENCE"
+  }
+]

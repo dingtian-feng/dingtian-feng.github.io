@@ -9,12 +9,19 @@
 <link>https://dingtian-feng.github.io/</link>
 <atom:link href="https://dingtian-feng.github.io/index.xml" rel="self" type="application/rss+xml"/>
 <description>Dingtian 的技术笔记：CS 与 AI 学习记录</description>
+<image>
+<url>https://dingtian-feng.github.io/profile.jpg</url>
+<title>Dingtian&#39;s Notes</title>
+<link>https://dingtian-feng.github.io/</link>
+<height>216</height>
+<width>144</width>
+</image>
 <generator>quarto-1.11.9</generator>
 <lastBuildDate>Sun, 15 Nov 2026 00:00:00 GMT</lastBuildDate>
 <item>
   <title>开博：从这里开始记录</title>
   <link>https://dingtian-feng.github.io/posts/hello/</link>
-  <description><![CDATA[ undefined ]]></description>
+  <description><![CDATA[ 本站的起点：记录 CS 与 AI 的学习笔记、论文精读和工程实践。 ]]></description>
   <category>notes</category>
   <category>ai</category>
   <guid>https://dingtian-feng.github.io/posts/hello/</guid>
