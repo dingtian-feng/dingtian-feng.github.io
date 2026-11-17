@@ -1,30 +1,25 @@
 ---
 title: "关于我"
-image: profile.jpg  # 把你的头像图片放根目录并改名为 profile.jpg（不想放头像就把这行删掉）
-about:
-  template: jolla   # 极简居中风格；如果想左右分栏可以改成 solana
-  links:
-    - icon: github
-      text: GitHub
-      href: https://github.com/dingtian-feng
-    - icon: link-45deg
-      text: 知乎
-      href: https://www.zhihu.com/people/feng-ding-tian
-    - icon: envelope
-      text: Email
-      href: mailto:1770618420@qq.com
 ---
 
-你好！我是 **Dingtian**，一名专注于 **计算机科学（CS）与人工智能（AI）** 的学习者 / 开发者。
+![](profile.jpg){.about-photo width="96"}
 
-这里是我用来记录技术探索、论文精读、工程踩坑以及日常思考的数字花园。
+你好，我是 **Dingtian**，一名专注于计算机科学（CS）与人工智能（AI）的学习者 / 开发者。
 
-### 🔬 关注领域
-* **大模型与 NLP**：Transformer 架构、LLM 微调与推理优化
-* **AI 工程化**：PyTorch、Agent 应用开发
-* **CS 基础**：算法、系统架构与开源工具
+这里用来记录技术探索、论文精读、工程踩坑以及日常思考。
 
-### 🛠️ 常用技术栈
+## 关注领域
+
+- **大模型与 NLP**：Transformer 架构、LLM 微调与推理优化
+- **AI 工程化**：PyTorch、Agent 应用开发
+- **CS 基础**：算法、系统架构与开源工具
+
+## 常用技术栈
+
 `Python` / `PyTorch` / `Git` / `Linux` / `VS Code`
 
-欢迎通过上方的 GitHub 或知乎与我交流！
+<div class="about-links">
+<a href="https://github.com/dingtian-feng">github</a>
+<a href="https://www.zhihu.com/people/feng-ding-tian">知乎</a>
+<a href="mailto:1770618420@qq.com">email</a>
+</div>

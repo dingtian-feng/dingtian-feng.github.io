@@ -1,125 +1,204 @@
-/* === 暗黑极客风格 (Dark Geek Theme) === */
-
 :root {
-    --geek-bg: #0d1117;
-    /* 深邃黑灰背景 (GitHub Dark 同款) */
-    --geek-card: #161b22;
-    /* 卡片与代码块背景 */
-    --geek-border: #30363d;
-    /* 极细暗色边框 */
-    --geek-text: #e6edf3;
-    /* 柔和亮白正文 */
-    --geek-muted: #8b949e;
-    /* 次要文字灰 */
-    --geek-accent: #38bdf8;
-    /* 赛博电光青 (主强调色) */
-    --geek-green: #3fb950;
-    /* 终端绿 (辅助强调色) */
+  --bg: #0b0e11;
+  --surface: #151a1f;
+  --fg: #e6edf3;
+  --muted: #8b949e;
+  --line: #2a333d;
+  --red: #e60012;
+  --cyan: #00e5ff;
+  --green: #7ee787;
+  --purple: #9d6bff;
+  --orange: #ff8a00;
+  --code-fg: #cfe8d8;
+  --mono: ui-monospace, SFMono-Regular, Menlo, Consolas, "Liberation Mono", monospace;
+  --sans: "Noto Sans SC", "PingFang SC", "Microsoft YaHei", system-ui, sans-serif;
 }
 
-/* 1. 全局背景与字体 */
+@counter-style file3 { system: extends decimal; pad: 3 "0"; }
+
+* { box-sizing: border-box; }
+
+html { background: var(--bg); }
+
 body {
-    background-color: var(--geek-bg);
-    color: var(--geek-text);
-    font-family: -apple-system, BlinkMacSystemFont, "Inter", "PingFang SC", "Microsoft YaHei", sans-serif;
-    line-height: 1.75;
+  background: var(--bg);
+  color: var(--fg);
+  font-family: var(--sans);
+  font-size: 16px;
+  line-height: 1.8;
+  max-width: 46rem;
+  margin: 0 auto;
+  padding: 0 1.25rem 5rem;
+  counter-reset: file;
 }
 
-/* 2. 顶部导航栏：毛玻璃暗黑质感 */
-.navbar {
-    background-color: rgba(13, 17, 23, 0.85) !important;
-    backdrop-filter: blur(10px);
-    border-bottom: 1px solid var(--geek-border);
+/* header */
+.site-header {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 0.5rem 1.5rem;
+  padding: 1.25rem 0;
+  border-bottom: 1px solid var(--line);
+  font-family: var(--mono);
+  font-size: 0.9rem;
+}
+.site-brand { color: var(--red); font-weight: 700; }
+.site-brand::before {
+  content: "";
+  display: inline-block;
+  width: 8px;
+  height: 8px;
+  background: var(--red);
+  margin-right: 0.6rem;
+}
+.site-nav { display: flex; flex-wrap: wrap; gap: 1.25rem; }
+.site-nav a { color: var(--muted); }
+
+/* links */
+a { color: var(--cyan); text-decoration: none; border-bottom: 1px solid transparent; }
+a:hover { color: var(--red); border-bottom-color: var(--red); }
+.site-brand:hover { border-bottom-color: var(--red); }
+
+/* title block */
+header#title-block-header { margin: 2.25rem 0 2rem; }
+header#title-block-header h1.title {
+  font-family: var(--mono);
+  font-size: 1.6rem;
+  font-weight: 600;
+  line-height: 1.4;
+  letter-spacing: 0.04em;
+  margin: 0;
+  padding-left: 14px;
+  border-left: 6px solid var(--red);
+  color: var(--fg);
+}
+header#title-block-header p.date,
+header#title-block-header p.author {
+  font-family: var(--mono);
+  font-size: 0.8rem;
+  color: var(--muted);
+  margin: 0.35rem 0 0;
 }
 
-.navbar-brand {
-    font-family: "JetBrains Mono", "Fira Code", Consolas, monospace;
-    font-weight: 700;
-    color: var(--geek-accent) !important;
-    letter-spacing: -0.5px;
+/* prose */
+h2, h3:not(.listing-title), h4 { font-weight: 600; line-height: 1.4; margin: 2.25rem 0 0.75rem; color: var(--fg); }
+h2 { font-size: 1.25rem; border-bottom: 2px solid var(--red); padding-bottom: 0.35rem; }
+h3 { font-size: 1.05rem; }
+p { margin: 0 0 1.1rem; }
+ul, ol { padding-left: 1.5rem; }
+li { margin: 0.3rem 0; }
+hr { border: 0; border-top: 1px solid var(--line); margin: 2rem 0; }
+blockquote {
+  margin: 1.25rem 0;
+  padding: 0 0 0 1rem;
+  border-left: 3px solid var(--orange);
+  background: rgba(230, 0, 18, 0.06);
+  color: var(--muted);
 }
 
-/* 给博客标题加一个终端命令提示符 >_ */
-.navbar-brand::before {
-    content: ">_ ";
-    color: var(--geek-green);
-}
-
-/* 3. 链接与悬停效果 */
-a {
-    color: var(--geek-accent);
-    text-decoration: none;
-    transition: all 0.2s ease;
-}
-
-a:hover {
-    color: #7dd3fc;
-    text-shadow: 0 0 8px rgba(56, 189, 248, 0.4);
-}
-
-/* 4. 文章列表卡片（首页） */
-.quarto-post,
-.card {
-    background-color: var(--geek-card) !important;
-    border: 1px solid var(--geek-border) !important;
-    border-radius: 10px;
-    padding: 1.2rem;
-    margin-bottom: 1.2rem;
-    transition: transform 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
-}
-
-.quarto-post:hover,
-.card:hover {
-    transform: translateY(-2px);
-    border-color: var(--geek-accent) !important;
-    box-shadow: 0 4px 20px rgba(56, 189, 248, 0.12);
-}
-
-/* 5. 分类标签 (Categories) 终端化 */
-.quarto-category {
-    font-family: "JetBrains Mono", "Fira Code", Consolas, monospace;
-    font-size: 0.78rem;
-    background-color: rgba(56, 189, 248, 0.1) !important;
-    color: var(--geek-accent) !important;
-    border: 1px solid rgba(56, 189, 248, 0.3) !important;
-    border-radius: 6px;
-}
-
-/* 6. 代码块与行内代码 */
-pre.sourceCode,
-div.sourceCode {
-    background-color: var(--geek-card) !important;
-    border: 1px solid var(--geek-border) !important;
-    border-radius: 8px;
-}
-
+/* code */
+code, pre, .listing-date, .listing-category, .site-header { font-family: var(--mono); }
 code:not(.sourceCode) {
-    font-family: "JetBrains Mono", "Fira Code", Consolas, monospace;
-    background-color: rgba(110, 118, 129, 0.25);
-    color: #79c0ff;
-    padding: 0.15em 0.4em;
-    border-radius: 4px;
-    font-size: 0.88em;
+  font-size: 0.88em;
+  color: var(--fg);
+  background: var(--surface);
+  padding: 0.1em 0.35em;
 }
-
-/* 7. 文章内图片：暗色微光边框 */
-img {
-    border-radius: 8px;
-    border: 1px solid var(--geek-border);
-    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
+pre { font-size: 0.86rem; line-height: 1.6; overflow-x: auto; }
+div.sourceCode {
+  position: relative;
+  background: var(--bg);
+  border: 1px solid var(--line);
+  border-left: 3px solid var(--purple);
+  padding: 1.9rem 1rem 0.9rem;
+  margin: 1.5rem 0;
 }
-
-/* 8. 右侧目录 (TOC) 高亮 */
-.sidebar nav[role="doc-toc"] ul>li>a.active {
-    color: var(--geek-accent) !important;
-    border-left: 2px solid var(--geek-accent) !important;
+pre.sourceCode { background: none; border: 0; padding: 0; margin: 0; }
+div.sourceCode::before {
+  content: "TERMINAL // LOG";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  padding: 0.25rem 0.8rem;
+  background: var(--surface);
+  border-bottom: 1px solid var(--line);
+  color: var(--purple);
+  font-family: var(--mono);
+  font-size: 0.65rem;
+  letter-spacing: 0.12em;
 }
+pre > code.sourceCode > span { display: inline; }
+code span { color: var(--code-fg); }
+code span.kw, code span.cf, code span.fu, code span.op,
+code span.dt, code span.va, code span.bu, code span.ex,
+code span.im, code span.at, code span.pp, code span.re,
+code span.cn, code span.cv, code span.dv, code span.bn { color: var(--cyan); }
+code span.st, code span.ch, code span.ss, code span.vs,
+code span.in, code span.do, code span.an, code span.fl,
+code span.sc { color: var(--orange); }
+code span.co { color: var(--muted); font-style: italic; }
+code span.al, code span.er, code span.wa { color: var(--red); font-weight: 600; }
 
-/* 让顶部博客标题在电脑端居中显示 */
-@media (min-width: 992px) {
-    .navbar .navbar-brand {
-        position: absolute;
-        left: 50%;
-        transform: translateX(-50%);
-    }
+/* images */
+img { max-width: 100%; border: 0; box-shadow: none; }
+
+/* listing */
+.quarto-listing-container-default { margin-top: 0; }
+.list.quarto-listing-default > .quarto-post {
+  display: grid;
+  grid-template-columns: 7.5rem 1fr auto;
+  gap: 0 1.25rem;
+  align-items: baseline;
+  padding: 0.7rem 0;
+  border: 0;
+  border-bottom: 1px solid var(--line);
+  background: none;
+}
+.quarto-post > .thumbnail,
+.quarto-post .listing-item-img-placeholder,
+.quarto-post .listing-item-img,
+.quarto-post .card-img-top,
+.quarto-post .listing-description { display: none; }
+.quarto-post > .body { display: contents; }
+.quarto-post > .metadata { grid-column: 1; grid-row: 1; }
+.quarto-post > .metadata::before {
+  counter-increment: file;
+  content: "FILE_" counter(file, file3);
+  display: block;
+  font-family: var(--mono);
+  font-size: 0.62rem;
+  color: var(--orange);
+  letter-spacing: 0.1em;
+}
+.quarto-post > .body > .listing-title { grid-column: 2; grid-row: 1; }
+.quarto-post > .body > .listing-categories { grid-column: 3; grid-row: 1; }
+.listing-title { font-size: 1rem; font-weight: 500; margin: 0; }
+.listing-title a { color: var(--green); font-family: var(--mono); letter-spacing: 0.02em; }
+.listing-title a:hover { color: #95d888; }
+.listing-categories { display: flex; gap: 0.5rem; align-items: baseline; }
+.listing-category {
+  font-family: var(--mono);
+  font-size: 0.7rem;
+  color: var(--orange);
+  border: 1px solid var(--orange);
+  padding: 1px 7px;
+  cursor: pointer;
+}
+.listing-date { font-family: var(--mono); font-size: 0.8rem; color: var(--muted); white-space: nowrap; }
+.d-none { display: none; }
+.listing-no-matching { color: var(--muted); font-family: var(--mono); font-size: 0.85rem; }
+
+/* about */
+.about-links { display: flex; gap: 1.25rem; font-family: var(--mono); font-size: 0.85rem; }
+.about-photo { width: 6rem; margin: 0 0 1.25rem; }
+
+@media (max-width: 34rem) {
+  .list.quarto-listing-default > .quarto-post { grid-template-columns: 1fr; gap: 0.15rem 0; }
+  .quarto-post > .metadata,
+  .quarto-post > .body > .listing-title,
+  .quarto-post > .body > .listing-categories { grid-column: 1; grid-row: auto; }
+  .quarto-post > .metadata { order: -1; }
 }

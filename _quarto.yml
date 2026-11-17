@@ -1,29 +1,22 @@
 project:
   type: website
 
-lang: zh 
+lang: zh
 
 website:
-  description: "A blog built with Quarto"
+  description: "Dingtian 的技术笔记：CS 与 AI 学习记录"
   site-url: https://dingtian-feng.github.io
   title: "Dingtian's Notes"
-  favicon: favicon.svg 
-  navbar:
-    right:
-      - about.qmd
-      - icon: github
-        href: https://github.com/dingtian-feng
-      - text: 知乎                              # 改用文字显示
-        href: https://www.zhihu.com/people/feng-ding-tian
-      - icon: rss                              # 新增 RSS 图标
-        href: index.xml
+  favicon: favicon.svg
 
 format:
   html:
-    theme: darkly
+    theme: none
     css: styles.css
-    toc: true
+    toc: false
+    date-format: iso
     highlight-style: dracula
+    include-before-body: _header.html
 
 execute:
   freeze: auto

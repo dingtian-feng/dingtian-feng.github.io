@@ -8,51 +8,17 @@
 <title>Dingtian&#39;s Notes</title>
 <link>https://dingtian-feng.github.io/</link>
 <atom:link href="https://dingtian-feng.github.io/index.xml" rel="self" type="application/rss+xml"/>
-<description>A blog built with Quarto</description>
+<description>Dingtian 的技术笔记：CS 与 AI 学习记录</description>
 <generator>quarto-1.11.9</generator>
-<lastBuildDate>Fri, 13 Nov 2026 16:00:00 GMT</lastBuildDate>
+<lastBuildDate>Sat, 14 Nov 2026 16:00:00 GMT</lastBuildDate>
 <item>
-  <title>Post With Code</title>
-  <dc:creator>Harlow Malloc</dc:creator>
-  <link>https://dingtian-feng.github.io/posts/welcome/post-with-code/</link>
-  <description><![CDATA[ 
-
-
-
-
-
-<p>This is a post with executable code.</p>
-
-
-
- ]]></description>
-  <category>news</category>
-  <category>code</category>
-  <category>analysis</category>
-  <guid>https://dingtian-feng.github.io/posts/welcome/post-with-code/</guid>
-  <pubDate>Fri, 13 Nov 2026 16:00:00 GMT</pubDate>
-  <media:content url="https://dingtian-feng.github.io/posts/welcome/post-with-code/image.jpg" medium="image" type="image/jpeg" height="96" width="144"/>
-</item>
-<item>
-  <title>Welcome To My Blog</title>
-  <dc:creator>Tristan O&#39;Malley</dc:creator>
-  <link>https://dingtian-feng.github.io/posts/welcome/</link>
-  <description><![CDATA[ 
-
-
-
-
-
-<p>This is the first post in a Quarto blog. Welcome!</p>
-<p><img src="https://dingtian-feng.github.io/posts/welcome/thumbnail.jpg" class="img-fluid" width="640"></p>
-<p>Since this post doesn’t specify an explicit <code>image</code>, the first image in the post will be used in the listing page of posts.</p>
-
-
-
- ]]></description>
-  <category>news</category>
-  <guid>https://dingtian-feng.github.io/posts/welcome/</guid>
-  <pubDate>Tue, 10 Nov 2026 16:00:00 GMT</pubDate>
+  <title>开博：从这里开始记录</title>
+  <link>https://dingtian-feng.github.io/posts/hello/</link>
+  <description><![CDATA[ undefined ]]></description>
+  <category>notes</category>
+  <category>ai</category>
+  <guid>https://dingtian-feng.github.io/posts/hello/</guid>
+  <pubDate>Sat, 14 Nov 2026 16:00:00 GMT</pubDate>
 </item>
 </channel>
 </rss>
