@@ -231,8 +231,8 @@ img { max-width: 100%; border: 0; box-shadow: none; }
 .quarto-post > .body > .listing-title { grid-column: 2; grid-row: 1; }
 .quarto-post > .body > .listing-categories { grid-column: 3; grid-row: 1; }
 .listing-title { font-size: 1rem; font-weight: 500; margin: 0; }
-.listing-title a { color: var(--green); font-family: var(--mono); letter-spacing: 0.02em; }
-.listing-title a:hover { color: #95d888; }
+.listing-title a { color: var(--green); font-family: var(--mono); letter-spacing: 0.02em; border-bottom: 1px solid transparent; }
+.listing-title a:hover { color: #95d888; border-bottom-color: #95d888; }
 .listing-categories { display: flex; gap: 0.5rem; align-items: baseline; }
 .listing-category {
   font-family: var(--mono);
