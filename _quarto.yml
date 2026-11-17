@@ -18,7 +18,7 @@ website:
 format:
   html:
     theme: none
-    css: styles.css?v=2
+    css: styles-v2.css
     toc: false
     date-format: iso
     highlight-style: dracula
