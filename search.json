@@ -11,7 +11,7 @@
     "href": "about.html",
     "title": "关于我",
     "section": "",
-    "text": "你好，我是 Dingtian，一名专注于计算机科学（CS）与人工智能（AI）的学习者 / 开发者。\n这里用来记录技术探索、论文精读、工程踩坑以及日常思考。\n关注领域\n\n大模型与 NLP：Transformer 架构、LLM 微调与推理优化\nAI 工程化：PyTorch、Agent 应用开发\nCS 基础：算法、系统架构与开源工具\n\n常用技术栈\nPython / PyTorch / Git / Linux / VS Code\n\ngithub 知乎 email"
+    "text": "你好，我是 Dingtian。我的主攻方向是 Agentic RL 与 Agentic Infra——一边研究智能体如何通过强化学习获得更长程、更可靠的行为，一边构建支撑这些智能体训练与运行的基础设施。\n这里主要记录我在研究、工程与实践中的探索：论文精读、实验复盘、系统设计与踩坑总结。\n主攻方向\n\nAgentic RL：面向工具调用、多步决策与长程任务的强化学习；奖励设计、轨迹优化与后训练方法\nAgentic Infra：Agent 训练与评测基础设施；工具执行环境、轨迹数据管线、沙箱与可观测性\nLLM 基础：模型微调与推理优化，以及让上述研究真正跑起来的系统实践\n\n常用技术栈\nPython / PyTorch / RL / Agent / Linux / Git / VS Code\n\ngithub 知乎 email"
   },
   {
     "objectID": "index.html",
