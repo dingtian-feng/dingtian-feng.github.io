@@ -17,7 +17,16 @@
 <width>144</width>
 </image>
 <generator>quarto-1.11.9</generator>
-<lastBuildDate>Sun, 15 Nov 2026 00:00:00 GMT</lastBuildDate>
+<lastBuildDate>Wed, 25 Nov 2026 00:00:00 GMT</lastBuildDate>
+<item>
+  <title>Missing Semester 2026 第一节：Introduction to the Shell</title>
+  <link>https://dingtian-feng.github.io/posts/missing-semester-shell/</link>
+  <description><![CDATA[ 2026 Missing Semester Shell 课程笔记：命令解析、管道与重定向、文本处理、脚本与习题解析。 ]]></description>
+  <category>notes</category>
+  <category>cs</category>
+  <guid>https://dingtian-feng.github.io/posts/missing-semester-shell/</guid>
+  <pubDate>Wed, 25 Nov 2026 00:00:00 GMT</pubDate>
+</item>
 <item>
   <title>开博：从这里开始记录</title>
   <link>https://dingtian-feng.github.io/posts/hello/</link>

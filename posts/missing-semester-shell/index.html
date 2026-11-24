@@ -1,0 +1,1452 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="zh-Hans" xml:lang="zh-Hans"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.11.9">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="dcterms.date" content="2026-11-25">
+<meta name="description" content="2026 Missing Semester Shell 课程笔记：命令解析、管道与重定向、文本处理、脚本与习题解析。">
+
+<title>Missing Semester 2026 第一节：Introduction to the Shell – Dingtian’s Notes</title>
+<style>
+/* Default styles provided by pandoc.
+** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
+*/
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: 1.5em;}
+div.column{flex: auto;}
+@media screen {
+div.columns{gap: min(4vw, 1.5em);}
+div.column{overflow-x: auto;}
+}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+.display.math{display: block; text-align: center; margin: 0.5rem auto;}
+/* CSS for syntax highlighting */
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<link href="../../favicon.svg" rel="icon" type="image/svg+xml">
+<script src="../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../site_libs/quarto-html/tabby.min.js"></script>
+<script src="../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/light-border.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/quarto-html-640605f58ae58ee79329c070719e555b.min.css" rel="stylesheet" append-hash="true" data-mode="light">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting-bfab7a599fae98b034a63943fa64fa68.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<meta name="theme-color" content="#0b0e11">
+
+
+<link rel="stylesheet" href="../../styles-v2.css">
+<meta property="og:title" content="Missing Semester 2026 第一节：Introduction to the Shell – Dingtian’s Notes">
+<meta property="og:description" content="2026 Missing Semester Shell 课程笔记：命令解析、管道与重定向、文本处理、脚本与习题解析。">
+<meta property="og:image" content="https://dingtian-feng.github.io/profile.jpg">
+<meta property="og:site_name" content="Dingtian’s Notes">
+<meta property="og:image:height" content="960">
+<meta property="og:image:width" content="640">
+<meta name="twitter:title" content="Missing Semester 2026 第一节：Introduction to the Shell – Dingtian’s Notes">
+<meta name="twitter:description" content="2026 Missing Semester Shell 课程笔记：命令解析、管道与重定向、文本处理、脚本与习题解析。">
+<meta name="twitter:image" content="https://dingtian-feng.github.io/profile.jpg">
+<meta name="twitter:card" content="summary_large_image">
+</head>
+
+<body>
+
+<div class="site-header">
+  <a class="site-brand" href="../../index.html">&gt;_ Dingtian's Notes</a>
+  <nav class="site-nav">
+    <a href="../../about.html">about</a>
+    <a href="https://github.com/dingtian-feng">github</a>
+    <a href="https://www.zhihu.com/people/feng-ding-tian">知乎</a>
+    <a href="../../index.xml">rss</a>
+  </nav>
+</div>
+<main class="content"><header id="title-block-header" class="quarto-title-block"><h1 class="title">Missing Semester 2026 第一节：Introduction to the Shell</h1></header>
+
+<header id="title-block-header">
+
+
+<p class="date">2026-11-25</p>
+</header>
+
+
+<p>课程主页：<a href="https://missing-semester-cn.github.io/2026/course-shell/">2026 Missing Semester · Introduction to the Shell</a></p>
+<h2 id="目录" class="anchored">目录</h2>
+<ol type="1">
+<li><a href="#提示符与基本形态">提示符与基本形态</a></li>
+<li><a href="#导航">导航</a></li>
+<li><a href="#参数里的空格引号与转义">参数里的空格：引号与转义</a></li>
+<li><a href="#查手册">查手册</a></li>
+<li><a href="#程序从哪来path">程序从哪来：<code>$PATH</code></a></li>
+<li><a href="#文本查看与简单处理">文本查看与简单处理</a></li>
+<li><a href="#查找文件find">查找文件：<code>find</code></a></li>
+<li><a href="#sed流式编辑"><code>sed</code>：流式编辑</a></li>
+<li><a href="#awk按列解析"><code>awk</code>：按列解析</a></li>
+<li><a href="#管道">管道 <code>|</code></a></li>
+<li><a href="#重定向与-tee">重定向与 <code>tee</code></a></li>
+<li><a href="#条件判断">条件判断</a></li>
+<li><a href="#循环命令替换与退出状态">循环、命令替换与退出状态</a></li>
+<li><a href="#写脚本">写脚本</a></li>
+<li><a href="#推荐的现代替代工具">推荐的现代替代工具</a></li>
+<li><a href="#常见坑速记">常见坑速记</a></li>
+<li><a href="#附录curl-与-jq">附录：<code>curl</code> 与 <code>jq</code></a></li>
+<li><a href="#一页速查">一页速查</a></li>
+<li><a href="#题目解析">题目解析</a></li>
+</ol>
+<h2 id="提示符与基本形态" class="anchored">1. 提示符与基本形态</h2>
+<pre class="text"><code>missing:~$ date
+Fri 10 Jan 2020 11:49:31 AM EST</code></pre>
+<ul>
+<li><code>missing</code>：主机名</li>
+<li><code>~</code>：当前工作目录，<code>~</code> 是 home 目录的简写（Linux 上通常是 <code>/home/用户名</code>）</li>
+<li><code>$</code>：普通用户；root 用户通常显示 <code>#</code></li>
+<li>输入一行命令后回车，Shell 解析并执行，然后等待下一条</li>
+</ul>
+<p><strong>命令的解析规则</strong>：按空白（空格、Tab）拆分整行，第一个词是要执行的程序，其余每个词作为参数传给它。</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb2"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="bu">echo</span> hello        <span class="co"># echo 打印参数</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="fu">date</span>              <span class="co"># 打印当前日期时间</span></span></code></pre></div><button title="复制到剪贴板" class="code-copy-button"><i class="bi"></i></button></div>
+<hr>
+<h2 id="导航" class="anchored">2. 导航</h2>
+<table class="caption-top">
+<colgroup>
+<col style="width: 50%">
+<col style="width: 50%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>命令</th>
+<th>作用</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>cd 路径</code></td>
+<td>切换当前工作目录（Shell 内建命令，<code>which cd</code> 找不到文件）</td>
+</tr>
+<tr class="even">
+<td><code>pwd</code></td>
+<td>打印当前工作目录</td>
+</tr>
+<tr class="odd">
+<td><code>echo $PWD</code></td>
+<td>同上，读取环境变量 <code>$PWD</code></td>
+</tr>
+<tr class="even">
+<td><code>ls 路径</code></td>
+<td>列出目录内容</td>
+</tr>
+</tbody>
+</table>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb3"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="bu">cd</span> /bin        <span class="co"># 绝对路径</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="bu">cd</span> bin         <span class="co"># 相对路径（相对当前目录）</span></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="bu">cd</span> ~           <span class="co"># 回到 home</span></span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a><span class="bu">cd</span> ..          <span class="co"># 上一级目录</span></span></code></pre></div><button title="复制到剪贴板" class="code-copy-button"><i class="bi"></i></button></div>
+<p><strong>绝对路径 vs 相对路径</strong></p>
+<ul>
+<li>绝对路径：以 <code>/</code> 开头，从根目录写完整路径</li>
+<li>相对路径：不以 <code>/</code> 开头，相对当前工作目录解析</li>
+<li>特殊路径：<code>.</code> 当前目录，<code>..</code> 父目录</li>
+</ul>
+<p><strong>效率技巧</strong></p>
+<ul>
+<li>按 <code>Tab</code> 自动补全路径</li>
+<li><code>zoxide</code> 提供的 <code>z</code> 命令：记住常访问目录，快速跳转</li>
+</ul>
+<h3 id="ls--l-与文件权限" class="anchored"><code>ls -l</code> 与文件权限</h3>
+<p><code>ls -l</code> 每行输出 7 个字段，其中第一个字段是权限位：</p>
+<pre class="text"><code>-rwxr-xr-x  1  user  group  1234  Jan  1 10:00  run.sh
+↑↑↑ ↑↑↑ ↑↑↑
+│   │   └── 其他用户：r-x
+│   └────── 所属组：r-x
+└────────── 文件类型 + 所有者：rwx</code></pre>
+<ul>
+<li>第一个字符： <code>-</code> 普通文件，<code>d</code> 目录，<code>l</code> 符号链接</li>
+<li><code>r</code> 读（4）、<code>w</code> 写（2）、<code>x</code> 执行（1），三组分别是所有者 / 所属组 / 其他用户</li>
+<li>对<strong>目录</strong>而言，<code>x</code> 表示能进入该目录，<code>r</code> 表示能列出内容</li>
+<li>权限也可用数字表示：<code>rwxr-xr-x</code> = <code>755</code>，<code>rw-r--r--</code> = <code>644</code></li>
+</ul>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb5"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="fu">chmod</span> +x run.sh      <span class="co"># 给脚本加执行权限，才能 ./run.sh 运行</span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="fu">chmod</span> 755 run.sh     <span class="co"># 数字写法，等价于 rwxr-xr-x</span></span></code></pre></div><button title="复制到剪贴板" class="code-copy-button"><i class="bi"></i></button></div>
+<p>这是讲义里「Shell 会在 <code>$PATH</code> 中找到同名文件，<strong>前提是该文件可执行</strong>」的那一环：脚本写好后必须 <code>chmod +x</code>。</p>
+<hr>
+<h2 id="参数里的空格引号与转义" class="anchored">3. 参数里的空格：引号与转义</h2>
+<p>参数本身含空格或特殊字符时（例如目录 <code>My Photos</code>）：</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb6"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="st">"My Photos"</span>     <span class="co"># 双引号括起来</span></span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="st">'My Photos'</span>     <span class="co"># 单引号括起来</span></span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a><span class="ex">My\ Photos</span>      <span class="co"># 反斜杠转义空格</span></span></code></pre></div><button title="复制到剪贴板" class="code-copy-button"><i class="bi"></i></button></div>
+<p>三种写法的区别不只是风格，关键在于<strong>变量是否展开</strong>：</p>
+<table class="caption-top">
+<colgroup>
+<col style="width: 33%">
+<col style="width: 33%">
+<col style="width: 33%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>写法</th>
+<th>变量 <code>$name</code></th>
+<th>典型用途</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>"My $name"</code></td>
+<td>展开为变量的值</td>
+<td>大多数情况首选，保留空格又允许替换</td>
+</tr>
+<tr class="even">
+<td><code>'My $name'</code></td>
+<td>不展开，原样输出字面文本</td>
+<td>正则、含大量特殊字符的字符串</td>
+</tr>
+<tr class="odd">
+<td><code>My\ $name</code></td>
+<td>只转义紧跟着的一个字符</td>
+<td>单个空格或特殊字符</td>
+</tr>
+<tr class="even">
+<td><code>$'a\nb'</code></td>
+<td>ANSI-C 转义，<code>\n</code> 变成真换行</td>
+<td>需要换行、制表符等控制字符时</td>
+</tr>
+</tbody>
+</table>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb7"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="va">name</span><span class="op">=</span>alice</span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="bu">echo</span> <span class="st">"hello </span><span class="va">$name</span><span class="st">"</span>    <span class="co"># hello alice</span></span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a><span class="bu">echo</span> <span class="st">'hello $name'</span>    <span class="co"># hello $name</span></span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a><span class="bu">echo</span> <span class="st">"文件存在"</span>       <span class="co"># 中文和空格在双引号里都安全</span></span></code></pre></div><button title="复制到剪贴板" class="code-copy-button"><i class="bi"></i></button></div>
+<p><strong>注意</strong>：<code>[ "$var" = "string" ]</code> 里的双引号不能省，否则变量为空时 <code>[</code> 会看到参数个数不对而报错。</p>
+<hr>
+<h2 id="查手册" class="anchored">4. 查手册</h2>
+<table class="caption-top">
+<thead>
+<tr class="header">
+<th>命令</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>man date</code></td>
+<td>查看命令完整手册</td>
+</tr>
+<tr class="even">
+<td><code>date --help</code></td>
+<td>简短帮助信息</td>
+</tr>
+<tr class="odd">
+<td><code>tldr date</code></td>
+<td>常用示例（需安装 <code>tldr</code>）</td>
+</tr>
+</tbody>
+</table>
+<p>在 <code>man</code> 的翻页界面里：</p>
+<table class="caption-top">
+<thead>
+<tr class="header">
+<th>按键</th>
+<th>作用</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>空格</code> / <code>f</code></td>
+<td>下一页</td>
+</tr>
+<tr class="even">
+<td><code>b</code></td>
+<td>上一页</td>
+</tr>
+<tr class="odd">
+<td><code>/关键词</code></td>
+<td>向下搜索（按 <code>n</code> 跳到下一个匹配）</td>
+</tr>
+<tr class="even">
+<td><code>q</code></td>
+<td>退出</td>
+</tr>
+</tbody>
+</table>
+<p><code>man</code> 内容很长，但它是离线可用的权威文档；<code>--help</code> 通常更快，<code>tldr</code> 直接给例子。</p>
+<hr>
+<h2 id="程序从哪来path" class="anchored">5. 程序从哪来：<code>$PATH</code></h2>
+<p>Shell 执行命令时，会在 <code>$PATH</code> 列出的目录（以 <code>:</code> 分隔）里逐个查找同名可执行文件。</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb8"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="bu">echo</span> <span class="va">$PATH</span></span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a><span class="co"># /usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin</span></span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a><span class="fu">which</span> echo       <span class="co"># 查看命令实际对应的文件，如 /bin/echo</span></span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a><span class="ex">/bin/echo</span> <span class="va">$PATH</span>  <span class="co"># 绕过 $PATH，用完整路径直接执行</span></span>
+<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a><span class="fu">ls</span> /bin          <span class="co"># 列出 $PATH 里某个目录的全部程序</span></span></code></pre></div><button title="复制到剪贴板" class="code-copy-button"><i class="bi"></i></button></div>
+<p><code>which cd</code> 找不到结果，是因为 <code>cd</code> 是 Shell 内建命令，不是磁盘上的可执行文件。</p>
+<hr>
+<h2 id="文本查看与简单处理" class="anchored">6. 文本查看与简单处理</h2>
+<table class="caption-top">
+<thead>
+<tr class="header">
+<th>命令</th>
+<th>作用</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>cat hello.txt</code></td>
+<td>打印整个文件</td>
+</tr>
+<tr class="even">
+<td><code>sort hello.txt</code></td>
+<td>按字典序排序后输出</td>
+</tr>
+<tr class="odd">
+<td><code>uniq hello.txt</code></td>
+<td>去掉<strong>连续</strong>重复行</td>
+</tr>
+<tr class="even">
+<td><code>head hello.txt</code></td>
+<td>打印前几行</td>
+</tr>
+<tr class="odd">
+<td><code>tail hello.txt</code></td>
+<td>打印后几行（<code>tail -n 20</code> 指定行数）</td>
+</tr>
+<tr class="even">
+<td><code>grep pattern hello.txt</code></td>
+<td>输出匹配 <code>pattern</code> 的行</td>
+</tr>
+</tbody>
+</table>
+<p><strong>常用选项</strong>（后面拆解 SSH 管道时会用到）：</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb9"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sort</span> <span class="at">-n</span> file              <span class="co"># 按数值排序（不是字典序，10 不会排在 2 前面）</span></span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a><span class="fu">sort</span> <span class="at">-nk1,1</span> file          <span class="co"># 按第 1 列数值排序；k1,1 表示只用第 1 列</span></span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a><span class="fu">uniq</span> <span class="at">-c</span> file              <span class="co"># 每行前面加上出现次数</span></span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a><span class="fu">tail</span> <span class="at">-n</span> 10 file           <span class="co"># 最后 10 行</span></span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a><span class="fu">paste</span> <span class="at">-sd,</span> file           <span class="co"># 把所有行用逗号拼成一行（-s 串行合并，-d, 指定分隔符）</span></span>
+<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a><span class="fu">grep</span> <span class="at">-r</span> <span class="at">-n</span> pattern .      <span class="co"># 递归搜索当前目录，并显示行号</span></span></code></pre></div><button title="复制到剪贴板" class="code-copy-button"><i class="bi"></i></button></div>
+<p><strong>注意</strong> <code>uniq</code> 只去掉<strong>相邻</strong>的重复行，所以常见写法是先 <code>sort</code> 再 <code>uniq</code>：</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb10"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sort</span> file <span class="kw">|</span> <span class="fu">uniq</span> <span class="at">-c</span> <span class="kw">|</span> <span class="fu">sort</span> <span class="at">-nk1,1</span>     <span class="co"># 统计词频并按次数升序排列</span></span></code></pre></div><button title="复制到剪贴板" class="code-copy-button"><i class="bi"></i></button></div>
+<p><code>pattern</code> 是正则表达式，可表达复杂匹配规则。<code>grep</code> 不指定文件时默认从标准输入读取，配合 <code>-r</code> 时可以指定目录递归搜索。</p>
+<hr>
+<h2 id="查找文件find" class="anchored">7. 查找文件：<code>find</code></h2>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb11"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="co"># 下载目录里超过 30 天的 zip 文件</span></span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a><span class="fu">find</span> ~/Downloads <span class="at">-type</span> f <span class="at">-name</span> <span class="st">"*.zip"</span> <span class="at">-mtime</span> +30</span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a><span class="co"># home 目录里大于 100M 的文件并列出详情</span></span>
+<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a><span class="fu">find</span> ~ <span class="at">-type</span> f <span class="at">-size</span> +100M <span class="at">-exec</span> ls <span class="at">-lh</span> {} <span class="dt">\;</span></span>
+<span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-7"><a href="#cb11-7" aria-hidden="true" tabindex="-1"></a><span class="co"># 当前目录下所有包含 </span><span class="al">TODO</span><span class="co"> 的 .py 文件</span></span>
+<span id="cb11-8"><a href="#cb11-8" aria-hidden="true" tabindex="-1"></a><span class="fu">find</span> . <span class="at">-name</span> <span class="st">"*.py"</span> <span class="at">-exec</span> grep <span class="at">-l</span> <span class="st">"TODO"</span> {} <span class="dt">\;</span></span></code></pre></div><button title="复制到剪贴板" class="code-copy-button"><i class="bi"></i></button></div>
+<p>要点：</p>
+<ul>
+<li><code>-type f</code> 只找普通文件</li>
+<li><code>-name "*.zip"</code> 按名字匹配（加引号防止 shell 先展开）</li>
+<li><code>-mtime +30</code> 修改时间超过 30 天；<code>-size +100M</code> 大小超过 100M</li>
+<li><code>-exec 命令 {} \;</code>：对每个匹配文件执行命令，<code>{}</code> 是文件路径占位符，<code>\;</code> 表示命令结束（分号要转义）</li>
+</ul>
+<h3 id="与-xargs-配合处理空格文件名" class="anchored">与 <code>xargs</code> 配合：处理空格文件名</h3>
+<p><code>-exec</code> 是「每个文件执行一次命令」。如果命令支持一次接收多个文件，用 <code>xargs</code> 通常更高效，但必须处理文件名里的空格：</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb12"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="fu">find</span> . <span class="at">-type</span> f <span class="at">-name</span> <span class="st">'*.sh'</span> <span class="at">-print0</span> <span class="kw">|</span> <span class="fu">xargs</span> <span class="at">-0</span> wc <span class="at">-l</span></span></code></pre></div><button title="复制到剪贴板" class="code-copy-button"><i class="bi"></i></button></div>
+<ul>
+<li><code>-print0</code> 让 <code>find</code> 用 NUL 字符（<code>\0</code>）而不是换行分隔文件名</li>
+<li><code>xargs -0</code> 按 NUL 拆分参数</li>
+<li>NUL 不可能出现在文件名里，所以空格、Tab、换行都不会把文件名拆错</li>
+</ul>
+<p><strong><code>-print0</code> 和 <code>-0</code> 必须成对使用</strong>：只改一边，文件名里的空格仍会被拆开。</p>
+<hr>
+<h2 id="sed流式编辑" class="anchored">8. <code>sed</code>：流式编辑</h2>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb13"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sed</span> <span class="at">-i</span> <span class="st">'s/pattern/replacement/g'</span> hello.txt</span></code></pre></div><button title="复制到剪贴板" class="code-copy-button"><i class="bi"></i></button></div>
+<p>把文件里所有 <code>pattern</code> 替换为 <code>replacement</code>：</p>
+<ul>
+<li><code>-i</code>：直接修改文件（否则只输出到终端）</li>
+<li><code>s/</code>：substitute，替换</li>
+<li>两个 <code>/</code> 分隔「匹配模式」和「替换内容」</li>
+<li><code>/g</code>：global，每行替换所有匹配（不加只替换每行第一个）</li>
+</ul>
+<p><code>pattern</code> 也支持正则，<code>replacement</code> 可以用 <code>\1</code> 等引用捕获组。</p>
+<h3 id="e扩展正则表达式" class="anchored"><code>-E</code>：扩展正则表达式</h3>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb14"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sed</span> <span class="at">-E</span> <span class="st">'s/.*Disconnected from .* user (.*) [^ ]+ port.*/\1/'</span> log.txt</span></code></pre></div><button title="复制到剪贴板" class="code-copy-button"><i class="bi"></i></button></div>
+<ul>
+<li><code>-E</code> 启用扩展正则：<code>( )</code>、<code>+</code>、<code>?</code>、<code>|</code> 等元字符<strong>不需要</strong>反斜杠转义</li>
+<li>不使用 <code>-E</code> 时，基本正则里要写成 <code>\(.*\)</code>、<code>\+</code></li>
+<li><code>(.*)</code> 是捕获组，匹配到的内容可用 <code>\1</code> 在替换部分引用</li>
+</ul>
+<p>SSH 管道里那条 <code>sed -E</code> 就是靠捕获组把用户名从日志行里抠出来的。</p>
+<hr>
+<h2 id="awk按列解析" class="anchored">9. <code>awk</code>：按列解析</h2>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb15"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="fu">awk</span> <span class="st">'{print $2}'</span> hello.csv        <span class="co"># 打印每行第二列（默认按空白分列）</span></span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a><span class="fu">awk</span> <span class="at">-F,</span> <span class="st">'{print $2}'</span> hello.csv    <span class="co"># 指定逗号分隔，再打印第二列</span></span></code></pre></div><button title="复制到剪贴板" class="code-copy-button"><i class="bi"></i></button></div>
+<p><code>awk</code> 用来「解析」结构化文本（如 CSV），除了取列，还能过滤行、求和、统计。</p>
+<hr>
+<h2 id="管道" class="anchored">10. 管道 <code>|</code></h2>
+<p>把前一个程序的<strong>标准输出</strong>，接到后一个程序的<strong>标准输入</strong>。</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb16"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="ex">cmd1</span> <span class="kw">|</span> <span class="ex">cmd2</span> <span class="kw">|</span> <span class="ex">cmd3</span></span></code></pre></div><button title="复制到剪贴板" class="code-copy-button"><i class="bi"></i></button></div>
+<p>之所以可行，是因为多数命令行程序在未给出 <code>file</code> 参数时，会从标准输入读取数据。管道是 Shell 组合（compose）程序的核心机制。</p>
+<p><strong>标准流</strong>：每个程序启动时有三条默认的输入输出通道。</p>
+<table class="caption-top">
+<thead>
+<tr class="header">
+<th>编号</th>
+<th>名称</th>
+<th>默认指向</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>0</td>
+<td>stdin（标准输入）</td>
+<td>键盘</td>
+</tr>
+<tr class="even">
+<td>1</td>
+<td>stdout（标准输出）</td>
+<td>终端屏幕</td>
+</tr>
+<tr class="odd">
+<td>2</td>
+<td>stderr（标准错误）</td>
+<td>终端屏幕</td>
+</tr>
+</tbody>
+</table>
+<p><strong>关键点</strong>：管道 <code>|</code> 只接 stdout，stderr 仍然直接显示在终端上，不会传给下一个命令。</p>
+<h3 id="经典组合ssh-日志管道" class="anchored">经典组合：SSH 日志管道</h3>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb17"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ssh</span> myserver <span class="st">'journalctl -u sshd -b-1 | grep "Disconnected from"'</span> <span class="dt">\</span></span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a>  <span class="kw">|</span> <span class="fu">sed</span> <span class="at">-E</span> <span class="st">'s/.*Disconnected from .* user (.*) [^ ]+ port.*/\1/'</span> <span class="dt">\</span></span>
+<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a>  <span class="kw">|</span> <span class="fu">sort</span> <span class="kw">|</span> <span class="fu">uniq</span> <span class="at">-c</span> <span class="dt">\</span></span>
+<span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a>  <span class="kw">|</span> <span class="fu">sort</span> <span class="at">-nk1,1</span> <span class="kw">|</span> <span class="fu">tail</span> <span class="at">-n10</span> <span class="dt">\</span></span>
+<span id="cb17-5"><a href="#cb17-5" aria-hidden="true" tabindex="-1"></a>  <span class="kw">|</span> <span class="fu">awk</span> <span class="st">'{print $2}'</span> <span class="kw">|</span> <span class="fu">paste</span> <span class="at">-sd,</span></span>
+<span id="cb17-6"><a href="#cb17-6" aria-hidden="true" tabindex="-1"></a><span class="co"># postgres,mysql,oracle,dell,ubuntu,inspur,test,admin,user,root</span></span></code></pre></div><button title="复制到剪贴板" class="code-copy-button"><i class="bi"></i></button></div>
+<p>逐段拆解：</p>
+<table class="caption-top">
+<colgroup>
+<col style="width: 50%">
+<col style="width: 50%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>片段</th>
+<th>作用</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>ssh myserver 'journalctl ... \| grep "Disconnected from"'</code></td>
+<td>在远程机器上取本次启动的 sshd 日志，筛出断开连接的行</td>
+</tr>
+<tr class="even">
+<td><code>sed -E 's/... (.*) .../\1/'</code></td>
+<td>用扩展正则的捕获组，把整行替换成用户名</td>
+</tr>
+<tr class="odd">
+<td><code>sort \| uniq -c</code></td>
+<td>先排序让相同名字相邻，再统计每个名字出现次数</td>
+</tr>
+<tr class="even">
+<td><code>sort -nk1,1 \| tail -n10</code></td>
+<td>按第 1 列（次数）数值排序，取出现最多的 10 个</td>
+</tr>
+<tr class="odd">
+<td><code>awk '{print $2}'</code></td>
+<td>只保留第 2 列，也就是用户名</td>
+</tr>
+<tr class="even">
+<td><code>paste -sd,</code></td>
+<td>把 10 行拼接成一行，用逗号隔开</td>
+</tr>
+</tbody>
+</table>
+<p>注意 <code>uniq</code> 只去相邻重复，所以 <code>sort</code> 必须在 <code>uniq</code> 之前；<code>sort -nk1,1</code> 必须指定按数值排，否则 <code>10</code> 会排在 <code>2</code> 前面。</p>
+<hr>
+<h2 id="重定向与-tee" class="anchored">11. 重定向与 <code>tee</code></h2>
+<table class="caption-top">
+<colgroup>
+<col style="width: 50%">
+<col style="width: 50%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>写法</th>
+<th>作用</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>&gt; file</code></td>
+<td>标准输出写入 file（覆盖）</td>
+</tr>
+<tr class="even">
+<td><code>&gt;&gt; file</code></td>
+<td>标准输出追加到 file</td>
+</tr>
+<tr class="odd">
+<td><code>&lt; file</code></td>
+<td>从 file 读取输入（而非键盘）</td>
+</tr>
+<tr class="even">
+<td><code>2&gt; file</code></td>
+<td>标准错误写入 file</td>
+</tr>
+<tr class="odd">
+<td><code>2&gt;&amp;1</code></td>
+<td>把 stderr 指向当前 stdout 指向的地方，常配合 <code>&gt; all.log 2&gt;&amp;1</code></td>
+</tr>
+<tr class="even">
+<td><code>tee</code></td>
+<td>同时输出到屏幕和文件</td>
+</tr>
+</tbody>
+</table>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb18"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="ex">verbose</span> cmd <span class="kw">|</span> <span class="fu">tee</span> verbose.log <span class="kw">|</span> <span class="fu">grep</span> CRITICAL</span></code></pre></div><button title="复制到剪贴板" class="code-copy-button"><i class="bi"></i></button></div>
+<p>完整日志存进 <code>verbose.log</code>，终端只显示筛出来的关键行。</p>
+<h3 id="的顺序陷阱" class="anchored"><code>2&gt;&amp;1</code> 的顺序陷阱</h3>
+<p>这两条命令<strong>不一样</strong>：</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb19"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="ex">cmd</span> <span class="op">&gt;</span> all.log <span class="dv">2</span><span class="op">&gt;&amp;</span><span class="dv">1</span>     <span class="co"># 正确：stdout 和 stderr 都进 all.log</span></span>
+<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a><span class="ex">cmd</span> <span class="dv">2</span><span class="op">&gt;&amp;</span><span class="dv">1</span> <span class="op">&gt;</span> all.log     <span class="co"># 错误：stderr 指向"当时的 stdout"（屏幕），stdout 进 all.log</span></span></code></pre></div><button title="复制到剪贴板" class="code-copy-button"><i class="bi"></i></button></div>
+<p>原因：<code>2&gt;&amp;1</code> 的含义是「把 fd 2 指向 <strong>fd 1 当前指向的地方</strong>」，它是<strong>按顺序执行</strong>的。</p>
+<ul>
+<li>第一种：先把 fd 1 改到文件，再让 fd 2 跟着 fd 1 → 都进文件</li>
+<li>第二种：先让 fd 2 跟着 fd 1（此时 fd 1 还是屏幕），再把 fd 1 改到文件 → 错误继续显示在屏幕，只有正常输出进文件</li>
+</ul>
+<p>记住写法：<strong><code>2&gt;&amp;1</code> 放在重定向的后面</strong>。</p>
+<hr>
+<h2 id="条件判断" class="anchored">12. 条件判断</h2>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb20"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> <span class="ex">command1</span><span class="kw">;</span> <span class="cf">then</span></span>
+<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a>    <span class="ex">command2</span></span>
+<span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a>    <span class="ex">command3</span></span>
+<span id="cb20-4"><a href="#cb20-4" aria-hidden="true" tabindex="-1"></a><span class="cf">fi</span></span></code></pre></div><button title="复制到剪贴板" class="code-copy-button"><i class="bi"></i></button></div>
+<p>也可以加 <code>else</code>。<code>command1</code> 常用 <code>test</code> 命令（简写为 <code>[</code>）：</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb21"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="bu">[</span> <span class="ot">-f</span> file <span class="bu">]</span>            <span class="co"># 文件是否存在</span></span>
+<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a><span class="bu">[</span> <span class="st">"</span><span class="va">$var</span><span class="st">"</span> <span class="ot">=</span> <span class="st">"string"</span> <span class="bu">]</span>  <span class="co"># 字符串是否相等</span></span>
+<span id="cb21-3"><a href="#cb21-3" aria-hidden="true" tabindex="-1"></a><span class="kw">[[</span> <span class="ot">-f</span> file <span class="kw">]]</span>          <span class="co"># bash 更安全的内置形式，引号处理更少坑</span></span></code></pre></div><button title="复制到剪贴板" class="code-copy-button"><i class="bi"></i></button></div>
+<p>注意：<code>[</code>、<code>]</code> 两侧必须有空格。</p>
+<hr>
+<h2 id="循环命令替换与退出状态" class="anchored">13. 循环、命令替换与退出状态</h2>
+<p><strong>while</strong>：只要条件成功就不断重复</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb22"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a><span class="cf">while</span> <span class="ex">command1</span><span class="kw">;</span> <span class="cf">do</span></span>
+<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a>    <span class="ex">command2</span></span>
+<span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a><span class="cf">done</span></span></code></pre></div><button title="复制到剪贴板" class="code-copy-button"><i class="bi"></i></button></div>
+<p><strong>for</strong>：遍历列表</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb23"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> varname <span class="kw">in</span> a b c d<span class="kw">;</span> <span class="cf">do</span></span>
+<span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a>    <span class="bu">command</span></span>
+<span id="cb23-3"><a href="#cb23-3" aria-hidden="true" tabindex="-1"></a><span class="cf">done</span></span></code></pre></div><button title="复制到剪贴板" class="code-copy-button"><i class="bi"></i></button></div>
+<p><strong>命令替换 <code>$()</code></strong>：先执行命令，用其输出替换整个 <code>$()</code></p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb24"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> i <span class="kw">in</span> <span class="va">$(</span><span class="fu">seq</span> 1 10<span class="va">)</span><span class="kw">;</span> <span class="cf">do</span></span>
+<span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a>    <span class="bu">echo</span> <span class="va">$i</span></span>
+<span id="cb24-3"><a href="#cb24-3" aria-hidden="true" tabindex="-1"></a><span class="cf">done</span></span></code></pre></div><button title="复制到剪贴板" class="code-copy-button"><i class="bi"></i></button></div>
+<p>老式写法是反引号 <code>`seq 1 10`</code>，但应优先用 <code>$()</code>，因为它支持嵌套。</p>
+<h3 id="退出状态-与" class="anchored">退出状态 <code>$?</code> 与 <code>&amp;&amp;</code>、<code>||</code></h3>
+<p>每条命令结束时都有一个<strong>退出状态</strong>：成功是 <code>0</code>，失败是非 <code>0</code>。<code>$?</code> 保存上一条命令的退出状态。</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb25"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a><span class="fu">grep</span> foo file.txt</span>
+<span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a><span class="bu">echo</span> <span class="va">$?</span>            <span class="co"># 0 表示找到了，1 表示没找到</span></span></code></pre></div><button title="复制到剪贴板" class="code-copy-button"><i class="bi"></i></button></div>
+<p><code>&amp;&amp;</code> 和 <code>||</code> 根据退出状态决定是否执行后面的命令（短路运算）：</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb26"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a><span class="fu">mkdir</span> <span class="at">-p</span> dir <span class="kw">&amp;&amp;</span> <span class="bu">echo</span> <span class="st">"创建成功"</span>     <span class="co"># 前面成功（0）才执行后面</span></span>
+<span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a><span class="bu">[</span> <span class="ot">!</span> <span class="ot">-d</span> dir <span class="bu">]</span> <span class="kw">&amp;&amp;</span> <span class="fu">mkdir</span> dir          <span class="co"># 目录不存在才创建</span></span>
+<span id="cb26-3"><a href="#cb26-3" aria-hidden="true" tabindex="-1"></a><span class="ex">cmd</span> <span class="kw">||</span> <span class="bu">echo</span> <span class="st">"cmd 失败了"</span>            <span class="co"># 前面失败（非 0）才执行后面</span></span></code></pre></div><button title="复制到剪贴板" class="code-copy-button"><i class="bi"></i></button></div>
+<p>这就是脚本里「失败即退出」（<code>set -e</code>）和 flaky test 循环「成功就继续重试」的底层机制。</p>
+<p><strong>常用特殊参数</strong>：<code>$1</code> 是第一个脚本参数，<code>$@</code> 是全部参数，<code>$?</code> 是上一条命令退出状态，<code>$!</code> 是上一个后台进程的 PID，<code>$$</code> 是当前 Shell 的 PID。<code>"$@"</code> 的引号不能省，否则每个参数里的空格会被拆开。</p>
+<hr>
+<h2 id="写脚本" class="anchored">14. 写脚本</h2>
+<p>推荐把脚本写进 <code>.sh</code> 文件。示例（反复运行测试直到失败，同时后台压 CPU，用于复现 flaky test）：</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb27"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a><span class="co">#!/bin/bash</span></span>
+<span id="cb27-2"><a href="#cb27-2" aria-hidden="true" tabindex="-1"></a><span class="bu">set</span> <span class="at">-euo</span> pipefail</span>
+<span id="cb27-3"><a href="#cb27-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb27-4"><a href="#cb27-4" aria-hidden="true" tabindex="-1"></a><span class="co"># 后台启动 CPU 压力</span></span>
+<span id="cb27-5"><a href="#cb27-5" aria-hidden="true" tabindex="-1"></a><span class="ex">stress</span> <span class="at">--cpu</span> 8 <span class="kw">&amp;</span></span>
+<span id="cb27-6"><a href="#cb27-6" aria-hidden="true" tabindex="-1"></a><span class="va">STRESS_PID</span><span class="op">=</span><span class="va">$!</span></span>
+<span id="cb27-7"><a href="#cb27-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb27-8"><a href="#cb27-8" aria-hidden="true" tabindex="-1"></a><span class="co"># 日志文件</span></span>
+<span id="cb27-9"><a href="#cb27-9" aria-hidden="true" tabindex="-1"></a><span class="va">LOGFILE</span><span class="op">=</span><span class="st">"test_runs_</span><span class="va">$(</span><span class="fu">date</span> +%s<span class="va">)</span><span class="st">.log"</span></span>
+<span id="cb27-10"><a href="#cb27-10" aria-hidden="true" tabindex="-1"></a><span class="bu">echo</span> <span class="st">"Logging to </span><span class="va">$LOGFILE</span><span class="st">"</span></span>
+<span id="cb27-11"><a href="#cb27-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb27-12"><a href="#cb27-12" aria-hidden="true" tabindex="-1"></a><span class="co"># 反复运行测试直到失败</span></span>
+<span id="cb27-13"><a href="#cb27-13" aria-hidden="true" tabindex="-1"></a><span class="va">RUN</span><span class="op">=</span>1</span>
+<span id="cb27-14"><a href="#cb27-14" aria-hidden="true" tabindex="-1"></a><span class="cf">while</span> <span class="ex">cargo</span> test my_test <span class="op">&gt;</span> <span class="st">"</span><span class="va">$LOGFILE</span><span class="st">"</span> <span class="dv">2</span><span class="op">&gt;&amp;</span><span class="dv">1</span><span class="kw">;</span> <span class="cf">do</span></span>
+<span id="cb27-15"><a href="#cb27-15" aria-hidden="true" tabindex="-1"></a>    <span class="bu">echo</span> <span class="st">"Run </span><span class="va">$RUN</span><span class="st"> passed"</span></span>
+<span id="cb27-16"><a href="#cb27-16" aria-hidden="true" tabindex="-1"></a>    <span class="kw">((</span><span class="va">RUN</span><span class="op">++</span><span class="kw">))</span></span>
+<span id="cb27-17"><a href="#cb27-17" aria-hidden="true" tabindex="-1"></a><span class="cf">done</span></span>
+<span id="cb27-18"><a href="#cb27-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb27-19"><a href="#cb27-19" aria-hidden="true" tabindex="-1"></a><span class="co"># 清理并报告</span></span>
+<span id="cb27-20"><a href="#cb27-20" aria-hidden="true" tabindex="-1"></a><span class="bu">kill</span> <span class="va">$STRESS_PID</span></span>
+<span id="cb27-21"><a href="#cb27-21" aria-hidden="true" tabindex="-1"></a><span class="bu">echo</span> <span class="st">"Test failed on run </span><span class="va">$RUN</span><span class="st">"</span></span>
+<span id="cb27-22"><a href="#cb27-22" aria-hidden="true" tabindex="-1"></a><span class="bu">echo</span> <span class="st">"Last 20 lines of output:"</span></span>
+<span id="cb27-23"><a href="#cb27-23" aria-hidden="true" tabindex="-1"></a><span class="fu">tail</span> <span class="at">-n</span> 20 <span class="st">"</span><span class="va">$LOGFILE</span><span class="st">"</span></span>
+<span id="cb27-24"><a href="#cb27-24" aria-hidden="true" tabindex="-1"></a><span class="bu">echo</span> <span class="st">"Full log: </span><span class="va">$LOGFILE</span><span class="st">"</span></span></code></pre></div><button title="复制到剪贴板" class="code-copy-button"><i class="bi"></i></button></div>
+<p><strong>关键点</strong></p>
+<ul>
+<li><code>#!/bin/bash</code>：shebang（解释器指示行），执行时把脚本内容交给 <code>/bin/bash</code></li>
+<li><code>set -euo pipefail</code>：严格模式
+<ul>
+<li><code>-e</code> 任一命令失败立即退出</li>
+<li><code>-u</code> 使用未定义变量直接报错</li>
+<li><code>-o pipefail</code> 管道中任一程序失败即算整个管道失败</li>
+</ul></li>
+<li><code>&amp;</code>：后台运行命令</li>
+<li><code>$!</code>：上一个后台进程的 PID</li>
+<li><code>((RUN++))</code>：算术扩展</li>
+<li><code>&gt; "$LOGFILE" 2&gt;&amp;1</code>：stdout 和 stderr 都写进日志</li>
+</ul>
+<h3 id="调试set--x" class="anchored">调试：<code>set -x</code></h3>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb28"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a><span class="bu">set</span> <span class="at">-x</span>    <span class="co"># 开启跟踪：每条命令执行前打印展开后的形式，带 + 前缀</span></span>
+<span id="cb28-2"><a href="#cb28-2" aria-hidden="true" tabindex="-1"></a><span class="bu">set</span> +x    <span class="co"># 关闭跟踪</span></span></code></pre></div><button title="复制到剪贴板" class="code-copy-button"><i class="bi"></i></button></div>
+<p>调试变量展开、引号、参数拆分问题时特别有用——你能直接看到 Shell <strong>实际执行</strong>的那条命令。也可以只包住可疑的几行：</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb29"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a><span class="bu">set</span> <span class="at">-x</span></span>
+<span id="cb29-2"><a href="#cb29-2" aria-hidden="true" tabindex="-1"></a><span class="bu">echo</span> <span class="st">"hello </span><span class="va">$name</span><span class="st">"</span></span>
+<span id="cb29-3"><a href="#cb29-3" aria-hidden="true" tabindex="-1"></a><span class="bu">set</span> +x</span></code></pre></div><button title="复制到剪贴板" class="code-copy-button"><i class="bi"></i></button></div>
+<h3 id="函数" class="anchored">函数</h3>
+<p>bash 和 Python 一样有函数，用来把重复的逻辑收起来：</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb30"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a><span class="fu">greet()</span> <span class="kw">{</span></span>
+<span id="cb30-2"><a href="#cb30-2" aria-hidden="true" tabindex="-1"></a>    <span class="bu">echo</span> <span class="st">"Hello, </span><span class="va">$1</span><span class="st">"</span></span>
+<span id="cb30-3"><a href="#cb30-3" aria-hidden="true" tabindex="-1"></a><span class="kw">}</span></span>
+<span id="cb30-4"><a href="#cb30-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb30-5"><a href="#cb30-5" aria-hidden="true" tabindex="-1"></a><span class="ex">greet</span> alice          <span class="co"># Hello, alice</span></span>
+<span id="cb30-6"><a href="#cb30-6" aria-hidden="true" tabindex="-1"></a><span class="ex">greet</span> <span class="st">"Tom Smith"</span>    <span class="co"># Hello, Tom Smith</span></span></code></pre></div><button title="复制到剪贴板" class="code-copy-button"><i class="bi"></i></button></div>
+<p>函数内部用 <code>$1</code>、<code>$2</code> 取调用时传入的参数，<code>$@</code> 是全部参数。</p>
+<h3 id="运行脚本" class="anchored">运行脚本</h3>
+<p>写好之后需要执行权限：</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb31"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a><span class="fu">chmod</span> +x script.sh    <span class="co"># 否则 ./script.sh 会报 Permission denied</span></span>
+<span id="cb31-2"><a href="#cb31-2" aria-hidden="true" tabindex="-1"></a><span class="ex">./script.sh</span>           <span class="co"># . 表示当前目录，不能省略</span></span>
+<span id="cb31-3"><a href="#cb31-3" aria-hidden="true" tabindex="-1"></a><span class="fu">bash</span> script.sh        <span class="co"># 这种调用方式不需要 +x</span></span></code></pre></div><button title="复制到剪贴板" class="code-copy-button"><i class="bi"></i></button></div>
+<hr>
+<h2 id="推荐的现代替代工具" class="anchored">15. 推荐的现代替代工具</h2>
+<table class="caption-top">
+<thead>
+<tr class="header">
+<th>传统命令</th>
+<th>替代</th>
+<th>好处</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>ls</code></td>
+<td><code>eza</code></td>
+<td>更现代友好</td>
+</tr>
+<tr class="even">
+<td><code>cat</code></td>
+<td><code>bat</code></td>
+<td>语法高亮、分页</td>
+</tr>
+<tr class="odd">
+<td><code>grep</code></td>
+<td><code>ripgrep</code> (<code>rg</code>)</td>
+<td>默认递归、更快</td>
+</tr>
+<tr class="even">
+<td><code>find</code></td>
+<td><code>fd</code></td>
+<td>更人性化</td>
+</tr>
+<tr class="odd">
+<td><code>cd</code></td>
+<td><code>zoxide</code> (<code>z</code>)</td>
+<td>记住常去目录</td>
+</tr>
+<tr class="even">
+<td><code>man</code></td>
+<td><code>tldr</code></td>
+<td>直接给常用示例</td>
+</tr>
+</tbody>
+</table>
+<p>写脚本时建议用 <code>shellcheck</code> 静态检查，能揪出大量 bash 陷阱。当脚本膨胀到 100 行以上，也可以考虑改用 Python 等更正式的语言。</p>
+<hr>
+<h2 id="常见坑速记" class="anchored">16. 常见坑速记</h2>
+<ul>
+<li>参数含空格：用引号或 <code>\</code> 转义；<code>"..."</code>，会展开变量，<code>'...'</code> 不会</li>
+<li><code>[</code> 和 <code>]</code> 两侧必须有空格；<code>[ "$var" = "x" ]</code> 里的引号不能省</li>
+<li><code>&gt;</code> 覆盖、<code>&gt;&gt;</code> 追加，别搞混</li>
+<li><code>2&gt;&amp;1</code> 的顺序有讲究，要写在 <code>&gt;</code> 之后</li>
+<li><code>uniq</code> 只去相邻重复，先 <code>sort</code> 再 <code>uniq</code></li>
+<li><code>sort -n</code> 按数值排，不然 <code>10</code> 排在 <code>2</code> 前面</li>
+<li><code>find -name</code> 的模式要加引号，防止被 shell 提前展开</li>
+<li><code>find ... -print0</code> 必须配 <code>xargs -0</code>，否则空格文件名会被拆开</li>
+<li><code>sed</code> 用捕获组时记得 <code>-E</code>，不然括号要写 <code>\(</code></li>
+<li>优先用 <code>$()</code> 而非反引号</li>
+<li>脚本开头写 <code>#!/bin/bash</code>，第二行写 <code>set -euo pipefail</code></li>
+<li>调试时 <code>set -x</code> 看展开后的命令，退出状态用 <code>$?</code> 查</li>
+<li>脚本要 <code>chmod +x</code> 才能用 <code>./script.sh</code> 运行</li>
+<li>bash 坑很多，写完跑 <code>shellcheck</code></li>
+</ul>
+<hr>
+<h2 id="附录curl-与-jq" class="anchored">17. 附录：<code>curl</code> 与 <code>jq</code></h2>
+<p>课程讲义正文没展开这两个工具，但习题里会用到。</p>
+<h3 id="curl从-url-取数据" class="anchored"><code>curl</code>：从 URL 取数据</h3>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb32"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a><span class="ex">curl</span> https://example.com/page.html      <span class="co"># 输出网页内容到终端</span></span>
+<span id="cb32-2"><a href="#cb32-2" aria-hidden="true" tabindex="-1"></a><span class="ex">curl</span> <span class="at">-s</span> https://example.com/data        <span class="co"># -s 静默模式，不显示进度条</span></span>
+<span id="cb32-3"><a href="#cb32-3" aria-hidden="true" tabindex="-1"></a><span class="ex">curl</span> <span class="at">-L</span> <span class="at">-o</span> page.html https://example.com  <span class="co"># -L 跟随重定向，-o 保存到文件</span></span></code></pre></div><button title="复制到剪贴板" class="code-copy-button"><i class="bi"></i></button></div>
+<h3 id="jq处理-json" class="anchored"><code>jq</code>：处理 JSON</h3>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb33"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a><span class="bu">echo</span> <span class="st">'{"name":"alice","age":30}'</span> <span class="kw">|</span> <span class="ex">jq</span> <span class="at">-r</span> .name</span>
+<span id="cb33-2"><a href="#cb33-2" aria-hidden="true" tabindex="-1"></a><span class="co"># alice</span></span></code></pre></div><button title="复制到剪贴板" class="code-copy-button"><i class="bi"></i></button></div>
+<ul>
+<li><code>jq</code> 读取 JSON 输入，按过滤器提取或转换数据</li>
+<li><code>-r</code>（<code>--raw-output</code>）输出纯字符串，而不是带引号的 JSON 字符串</li>
+<li>常用于 <code>curl ... | jq ...</code> 组合：下载接口数据后直接提取需要的字段</li>
+</ul>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb34"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a><span class="ex">curl</span> <span class="at">-s</span> https://api.example.com/users <span class="kw">|</span> <span class="ex">jq</span> <span class="at">-r</span> <span class="st">'.items[] | .name'</span></span></code></pre></div><button title="复制到剪贴板" class="code-copy-button"><i class="bi"></i></button></div>
+<hr>
+<h2 id="一页速查" class="anchored">18. 一页速查</h2>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb35"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true" tabindex="-1"></a><span class="co"># 导航</span></span>
+<span id="cb35-2"><a href="#cb35-2" aria-hidden="true" tabindex="-1"></a><span class="bu">cd</span> /path  pwd  ls <span class="at">-l</span>  chmod +x file</span>
+<span id="cb35-3"><a href="#cb35-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb35-4"><a href="#cb35-4" aria-hidden="true" tabindex="-1"></a><span class="co"># 查找</span></span>
+<span id="cb35-5"><a href="#cb35-5" aria-hidden="true" tabindex="-1"></a><span class="fu">find</span> . <span class="at">-type</span> f <span class="at">-name</span> <span class="st">"*.sh"</span></span>
+<span id="cb35-6"><a href="#cb35-6" aria-hidden="true" tabindex="-1"></a><span class="fu">find</span> . <span class="at">-type</span> f <span class="at">-name</span> <span class="st">'*.sh'</span> <span class="at">-print0</span> <span class="kw">|</span> <span class="fu">xargs</span> <span class="at">-0</span> wc <span class="at">-l</span></span>
+<span id="cb35-7"><a href="#cb35-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb35-8"><a href="#cb35-8" aria-hidden="true" tabindex="-1"></a><span class="co"># 文本处理</span></span>
+<span id="cb35-9"><a href="#cb35-9" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span>  sort <span class="at">-n</span>  uniq <span class="at">-c</span>  head <span class="at">-n</span> 10  tail <span class="at">-n</span> 10  grep <span class="at">-rn</span> pattern .</span>
+<span id="cb35-10"><a href="#cb35-10" aria-hidden="true" tabindex="-1"></a><span class="fu">sed</span> <span class="at">-i</span> <span class="st">'s/a/b/g'</span> file</span>
+<span id="cb35-11"><a href="#cb35-11" aria-hidden="true" tabindex="-1"></a><span class="fu">sed</span> <span class="at">-E</span> <span class="st">'s/(.*)/\1/'</span> file</span>
+<span id="cb35-12"><a href="#cb35-12" aria-hidden="true" tabindex="-1"></a><span class="fu">awk</span> <span class="at">-F,</span> <span class="st">'{print $2}'</span> file</span>
+<span id="cb35-13"><a href="#cb35-13" aria-hidden="true" tabindex="-1"></a><span class="fu">paste</span> <span class="at">-sd,</span> file</span>
+<span id="cb35-14"><a href="#cb35-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb35-15"><a href="#cb35-15" aria-hidden="true" tabindex="-1"></a><span class="co"># 组合与重定向</span></span>
+<span id="cb35-16"><a href="#cb35-16" aria-hidden="true" tabindex="-1"></a><span class="ex">cmd1</span> <span class="kw">|</span> <span class="ex">cmd2</span></span>
+<span id="cb35-17"><a href="#cb35-17" aria-hidden="true" tabindex="-1"></a><span class="ex">cmd</span> <span class="op">&gt;</span> out <span class="dv">2</span><span class="op">&gt;&amp;</span><span class="dv">1</span></span>
+<span id="cb35-18"><a href="#cb35-18" aria-hidden="true" tabindex="-1"></a><span class="ex">cmd</span> <span class="kw">|</span> <span class="fu">tee</span> log <span class="kw">|</span> <span class="fu">grep</span> CRITICAL</span>
+<span id="cb35-19"><a href="#cb35-19" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb35-20"><a href="#cb35-20" aria-hidden="true" tabindex="-1"></a><span class="co"># 脚本</span></span>
+<span id="cb35-21"><a href="#cb35-21" aria-hidden="true" tabindex="-1"></a><span class="co">#!/bin/bash</span></span>
+<span id="cb35-22"><a href="#cb35-22" aria-hidden="true" tabindex="-1"></a><span class="bu">set</span> <span class="at">-euo</span> pipefail</span>
+<span id="cb35-23"><a href="#cb35-23" aria-hidden="true" tabindex="-1"></a><span class="bu">set</span> <span class="at">-x</span> / set +x</span>
+<span id="cb35-24"><a href="#cb35-24" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> <span class="bu">[</span> <span class="ot">-f</span> file <span class="bu">]</span><span class="kw">;</span> <span class="cf">then</span> <span class="ex">...</span><span class="kw">;</span> <span class="cf">fi</span></span>
+<span id="cb35-25"><a href="#cb35-25" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> x <span class="kw">in</span> <span class="va">$(</span><span class="fu">seq</span> 1 10<span class="va">)</span><span class="kw">;</span> <span class="cf">do</span> <span class="ex">...</span><span class="kw">;</span> <span class="cf">done</span></span>
+<span id="cb35-26"><a href="#cb35-26" aria-hidden="true" tabindex="-1"></a><span class="cf">while</span> <span class="ex">cmd</span><span class="kw">;</span> <span class="cf">do</span> <span class="ex">...</span><span class="kw">;</span> <span class="cf">done</span></span>
+<span id="cb35-27"><a href="#cb35-27" aria-hidden="true" tabindex="-1"></a><span class="fu">func()</span> <span class="kw">{</span> <span class="bu">echo</span> <span class="st">"</span><span class="va">$1</span><span class="st">"</span><span class="kw">;</span> <span class="kw">}</span></span></code></pre></div><button title="复制到剪贴板" class="code-copy-button"><i class="bi"></i></button></div>
+<hr>
+<h2 id="题目解析" class="anchored">19. 题目解析</h2>
+<h3 id="确认当前-shell-是否合适" class="anchored">1. 确认当前 Shell 是否合适</h3>
+<p>在终端中运行以下命令查看默认登录 Shell：</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb36"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb36-1"><a href="#cb36-1" aria-hidden="true" tabindex="-1"></a><span class="bu">echo</span> <span class="va">$SHELL</span></span></code></pre></div><button title="复制到剪贴板" class="code-copy-button"><i class="bi"></i></button></div>
+<p>如果输出 <code>/bin/bash</code>、<code>/usr/bin/zsh</code> 或类似类 Unix Shell 路径即说明符合要求。</p>
+<ul>
+<li><strong>补充验证</strong>：<code>$SHELL</code> 显示的是用户的默认登录 Shell；如果想确认<strong>当前正在运行的 Shell 进程</strong>，可运行 <code>echo $0</code> 或 <code>ps -p $$</code>。</li>
+<li><strong>Windows 用户</strong>：不能直接使用 <code>cmd.exe</code> 或 <code>PowerShell</code>，需安装 <strong>WSL（Windows Subsystem for Linux）</strong> 或 Linux 虚拟机并在其中打开 Bash/ZSH。</li>
+</ul>
+<h3 id="ls--l-的作用及前-10-个字符含义" class="anchored">2. <code>ls -l</code> 的作用及前 10 个字符含义</h3>
+<p><code>ls -l</code> 以<strong>长列表格式（long listing format）</strong>显示目录内容，包含文件类型、权限、硬链接数、所有者、所属组、大小、修改时间和文件名。</p>
+<p>运行 <code>ls -l /</code> 后，每行最前面 10 个字符的含义如下：</p>
+<ul>
+<li><strong>第 1 个字符（文件类型）</strong>：<code>-</code> 普通文件、<code>d</code> 目录、<code>l</code> 符号链接；其他常见类型：<code>c</code>（字符设备）、<code>b</code>（块设备）、<code>p</code>（命名管道）、<code>s</code>（套接字）</li>
+<li><strong>第 2～4 个字符（所有者权限 / User）</strong>：依次为读 <code>r</code>、写 <code>w</code>、执行 <code>x</code>（<code>-</code> 表示无该权限）</li>
+<li><strong>第 5～7 个字符（所属用户组权限 / Group）</strong>：依次为 <code>r</code>、<code>w</code>、<code>x</code></li>
+<li><strong>第 8～10 个字符（其他用户权限 / Others）</strong>：依次为 <code>r</code>、<code>w</code>、<code>x</code></li>
+</ul>
+<blockquote>
+<p>注：在部分系统文件（如 <code>/tmp</code> 或 <code>/usr/bin/sudo</code>）中，执行位 <code>x</code> 的位置可能会看到 <code>s</code>/<code>S</code>（SUID/SGID）或 <code>t</code>/<code>T</code>（Sticky Bit）。</p>
+</blockquote>
+<h3 id="什么是-glob及模式匹配实验" class="anchored">3. 什么是 glob？及模式匹配实验</h3>
+<p><strong>glob</strong>（源自早期 Unix 的 <code>/etc/glob</code> 程序）在 Shell 中指<strong>路径名扩展 / 文件名通配符匹配（Pathname Expansion）</strong>——即 Shell 根据通配符模式，自动将其展开为当前路径下所有匹配的文件名列表。常见通配符包括：</p>
+<ul>
+<li><code>*</code>：匹配任意数量（包括 0 个）的任意字符（不包含以 <code>.</code> 开头的隐藏文件首字符）</li>
+<li><code>?</code>：匹配单个任意字符</li>
+<li><code>[...]</code>：匹配括号内的任意单个字符（如 <code>[abc]</code>、<code>[0-9]</code>）</li>
+</ul>
+<p><strong>注意区别</strong>：</p>
+<ol type="1">
+<li>在 <code>find ~/Downloads -type f -name "*.zip" -mtime +30</code> 中，<code>*.zip</code> 被双引号括起来是为了<strong>防止 Shell 提前展开</strong>，而是把通配模式原样传给 <code>find</code> 内部进行匹配。</li>
+<li><code>{a,b,c}.txt</code> 严格来说属于<strong>花括号扩展（Brace Expansion）</strong>而非 glob：无论对应文件是否存在，Shell 都会先把它展开成 <code>a.txt b.txt c.txt</code>。</li>
+</ol>
+<p><strong>实验命令</strong>：</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb37"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb37-1"><a href="#cb37-1" aria-hidden="true" tabindex="-1"></a><span class="fu">mkdir</span> <span class="at">-p</span> /tmp/glob_test <span class="kw">&amp;&amp;</span> <span class="bu">cd</span> /tmp/glob_test</span>
+<span id="cb37-2"><a href="#cb37-2" aria-hidden="true" tabindex="-1"></a><span class="fu">touch</span> a.txt b.txt c.txt file1.txt file2.txt file10.txt</span>
+<span id="cb37-3"><a href="#cb37-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb37-4"><a href="#cb37-4" aria-hidden="true" tabindex="-1"></a><span class="fu">ls</span> <span class="pp">*</span>.txt         <span class="co"># 匹配所有 .txt 文件</span></span>
+<span id="cb37-5"><a href="#cb37-5" aria-hidden="true" tabindex="-1"></a><span class="fu">ls</span> file<span class="pp">?</span>.txt     <span class="co"># 匹配 file1.txt、file2.txt（不匹配 file10.txt）</span></span>
+<span id="cb37-6"><a href="#cb37-6" aria-hidden="true" tabindex="-1"></a><span class="fu">ls</span> <span class="dt">{a</span><span class="op">,</span><span class="dt">b</span><span class="op">,</span><span class="dt">c}</span>.txt   <span class="co"># 展开为 ls a.txt b.txt c.txt 并列出这几个文件</span></span></code></pre></div><button title="复制到剪贴板" class="code-copy-button"><i class="bi"></i></button></div>
+<h3 id="三种引号的区别-输出包含-和换行符的字符串" class="anchored">4. 三种引号的区别 &amp; 输出包含 <code>$</code>、<code>!</code> 和换行符的字符串</h3>
+<ul>
+<li><strong><code>'单引号'</code>（强引用）</strong>：保留内部所有字符的字面值，<strong>不做任何</strong>变量替换、命令替换、历史扩展或转义解析（内部不能直接包含单引号本身）。</li>
+<li><strong><code>"双引号"</code>（弱引用）</strong>：保留大部分字符的字面值（如空格、<code>*</code>、<code>~</code> 均不展开），但仍会解析：
+<ul>
+<li><code>$</code>（变量替换、命令替换 <code>$(...)</code>、算术扩展 <code>$((...))</code>）</li>
+<li><code>`</code>（反引号命令替换）</li>
+<li><code>\</code>（仅在后接 <code>$</code>、<code>`</code>、<code>"</code>、<code>\</code> 或换行符时作为转义）</li>
+<li><code>!</code>（在交互式 Bash 中触发历史记录扩展）</li>
+</ul></li>
+<li><strong><code>$'ANSI 引号'</code>（ANSI-C Quoting）</strong>：整体按单引号处理（不展开 <code>$</code> 变量、不触发 <code>!</code> 历史扩展），但会解析 C 语言风格的反斜杠转义序列（如 <code>\n</code> 换行、<code>\t</code> 制表符、<code>\\</code> 反斜杠、<code>\'</code> 单引号等）。</li>
+</ul>
+<p><strong>输出同时包含字面量 <code>$</code>、<code>!</code> 和换行符的命令</strong>：</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb38"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb38-1"><a href="#cb38-1" aria-hidden="true" tabindex="-1"></a><span class="co"># 使用 $'...'（推荐，利用 ANSI-C 引号特性）：</span></span>
+<span id="cb38-2"><a href="#cb38-2" aria-hidden="true" tabindex="-1"></a><span class="bu">printf</span> <span class="st">'%s'</span> <span class="st">$'$!</span><span class="dt">\n</span><span class="st">'</span></span>
+<span id="cb38-3"><a href="#cb38-3" aria-hidden="true" tabindex="-1"></a><span class="co"># 或者在中间包含换行符，效果更直观：</span></span>
+<span id="cb38-4"><a href="#cb38-4" aria-hidden="true" tabindex="-1"></a><span class="bu">echo</span> <span class="st">$'$</span><span class="dt">\n</span><span class="st">!'</span></span>
+<span id="cb38-5"><a href="#cb38-5" aria-hidden="true" tabindex="-1"></a><span class="co"># 也可以直接用 printf：</span></span>
+<span id="cb38-6"><a href="#cb38-6" aria-hidden="true" tabindex="-1"></a><span class="bu">printf</span> <span class="st">'$!\n'</span></span></code></pre></div><button title="复制到剪贴板" class="code-copy-button"><i class="bi"></i></button></div>
+<h3 id="标准流与重定向" class="anchored">5. 标准流与重定向</h3>
+<p>运行 <code>ls /nonexistent /tmp</code> 时，<code>/tmp</code> 的内容会输出到 <strong>stdout（1）</strong>，<code>/nonexistent</code> 的报错会输出到 <strong>stderr（2）</strong>。</p>
+<ol type="1">
+<li><p><strong>分别重定向到两个文件</strong>：</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb39"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb39-1"><a href="#cb39-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ls</span> /nonexistent /tmp <span class="op">&gt;</span> out.txt <span class="dv">2</span><span class="op">&gt;</span> err.txt</span></code></pre></div><button title="复制到剪贴板" class="code-copy-button"><i class="bi"></i></button></div>
+<p>（<code>&gt;</code> 等价于 <code>1&gt;</code>）</p></li>
+<li><p><strong>将 stdout 和 stderr 都重定向到同一个文件</strong>：</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb40"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb40-1"><a href="#cb40-1" aria-hidden="true" tabindex="-1"></a><span class="co"># 通用 POSIX 写法（注意顺序：先重定向 stdout，再让 stderr 指向 stdout）：</span></span>
+<span id="cb40-2"><a href="#cb40-2" aria-hidden="true" tabindex="-1"></a><span class="fu">ls</span> /nonexistent /tmp <span class="op">&gt;</span> all.txt <span class="dv">2</span><span class="op">&gt;&amp;</span><span class="dv">1</span></span>
+<span id="cb40-3"><a href="#cb40-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb40-4"><a href="#cb40-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Bash 简写：</span></span>
+<span id="cb40-5"><a href="#cb40-5" aria-hidden="true" tabindex="-1"></a><span class="fu">ls</span> /nonexistent /tmp <span class="op">&amp;&gt;</span> all.txt</span></code></pre></div><button title="复制到剪贴板" class="code-copy-button"><i class="bi"></i></button></div>
+<blockquote>
+<p>⚠️ <strong>注意顺序</strong>：<code>2&gt;&amp;1 &gt; all.txt</code> 是错误的——它会先把 stderr 指向原来的终端，再把 stdout 重定向到文件，导致报错依然打印在屏幕上。</p>
+</blockquote></li>
+</ol>
+<h3 id="一行命令仅当-tmpmydir-不存在时创建它" class="anchored">6. 一行命令：仅当 <code>/tmp/mydir</code> 不存在时创建它</h3>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb41"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb41-1"><a href="#cb41-1" aria-hidden="true" tabindex="-1"></a><span class="bu">[</span> <span class="ot">-d</span> /tmp/mydir <span class="bu">]</span> <span class="kw">||</span> <span class="fu">mkdir</span> /tmp/mydir</span></code></pre></div><button title="复制到剪贴板" class="code-copy-button"><i class="bi"></i></button></div>
+<p>或者使用 <code>&amp;&amp;</code>：</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb42"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb42-1"><a href="#cb42-1" aria-hidden="true" tabindex="-1"></a><span class="bu">[</span> <span class="ot">!</span> <span class="ot">-d</span> /tmp/mydir <span class="bu">]</span> <span class="kw">&amp;&amp;</span> <span class="fu">mkdir</span> /tmp/mydir</span></code></pre></div><button title="复制到剪贴板" class="code-copy-button"><i class="bi"></i></button></div>
+<p>（若想防止 <code>/tmp/mydir</code> 恰好是一个已存在的普通文件，也可用 <code>[ ! -e /tmp/mydir ] &amp;&amp; mkdir /tmp/mydir</code>。）</p>
+<h3 id="为什么-cd-必须是-shell-内建命令而不能是独立程序" class="anchored">7. 为什么 <code>cd</code> 必须是 Shell 内建命令，而不能是独立程序？</h3>
+<p>当 Shell 执行一个外部独立程序（例如 <code>/bin/ls</code>）时，操作系统会通过 <code>fork</code> 创建一个<strong>子进程</strong>来运行它。在 Unix/Linux 进程模型中，每个进程都有自己独立的“当前工作目录（CWD）”和环境状态：</p>
+<ul>
+<li><strong>子进程只能修改自己的工作目录，无法反向修改父进程（即当前 Shell）的工作目录。</strong></li>
+<li>如果 <code>cd</code> 是一个独立程序，它只在自己的子进程里切换了目录，程序退出后，父进程 Shell 的当前目录依然停留在原地，没有任何效果。</li>
+</ul>
+<p>因此，<code>cd</code> 必须由 Shell 进程自己作为<strong>内建命令（builtin）</strong>来执行，直接调用操作系统的 <code>chdir()</code> 系统调用修改当前 Shell 进程自身的工作目录。</p>
+<h3 id="编写检查文件是否存在的脚本" class="anchored">8. 编写检查文件是否存在的脚本</h3>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb43"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb43-1"><a href="#cb43-1" aria-hidden="true" tabindex="-1"></a><span class="co">#!/bin/bash</span></span>
+<span id="cb43-2"><a href="#cb43-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb43-3"><a href="#cb43-3" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> <span class="bu">[</span> <span class="ot">-z</span> <span class="st">"</span><span class="va">$1</span><span class="st">"</span> <span class="bu">]</span><span class="kw">;</span> <span class="cf">then</span></span>
+<span id="cb43-4"><a href="#cb43-4" aria-hidden="true" tabindex="-1"></a>    <span class="bu">echo</span> <span class="st">"用法: </span><span class="va">$0</span><span class="st"> &lt;文件名&gt;"</span></span>
+<span id="cb43-5"><a href="#cb43-5" aria-hidden="true" tabindex="-1"></a>    <span class="bu">exit</span> 1</span>
+<span id="cb43-6"><a href="#cb43-6" aria-hidden="true" tabindex="-1"></a><span class="cf">fi</span></span>
+<span id="cb43-7"><a href="#cb43-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb43-8"><a href="#cb43-8" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> <span class="bu">[</span> <span class="ot">-f</span> <span class="st">"</span><span class="va">$1</span><span class="st">"</span> <span class="bu">]</span><span class="kw">;</span> <span class="cf">then</span></span>
+<span id="cb43-9"><a href="#cb43-9" aria-hidden="true" tabindex="-1"></a>    <span class="bu">echo</span> <span class="st">"文件 '</span><span class="va">$1</span><span class="st">' 存在（且是一个普通文件）。"</span></span>
+<span id="cb43-10"><a href="#cb43-10" aria-hidden="true" tabindex="-1"></a><span class="cf">else</span></span>
+<span id="cb43-11"><a href="#cb43-11" aria-hidden="true" tabindex="-1"></a>    <span class="bu">echo</span> <span class="st">"文件 '</span><span class="va">$1</span><span class="st">' 不存在（或不是普通文件）。"</span></span>
+<span id="cb43-12"><a href="#cb43-12" aria-hidden="true" tabindex="-1"></a><span class="cf">fi</span></span></code></pre></div><button title="复制到剪贴板" class="code-copy-button"><i class="bi"></i></button></div>
+<p>（注：<code>[</code> 和 <code>]</code> 前后必须有空格；<code>"$1"</code> 加双引号可以防止文件名含空格或为空时出错。）</p>
+<h3 id="check.sh-somefile-报错与-chmod-x-的必要性" class="anchored">9. <code>./check.sh somefile</code> 报错与 <code>chmod +x</code> 的必要性</h3>
+<ol type="1">
+<li><p><strong>直接运行 <code>./check.sh somefile</code> 会报错</strong>：</p>
+<pre class="text"><code>-bash: ./check.sh: Permission denied</code></pre></li>
+<li><p><strong>执行 <code>chmod +x check.sh</code> 后再运行</strong>：脚本能够正常执行并输出判断结果。</p></li>
+<li><p><strong>为什么这一步是必须的</strong>：</p>
+<ul>
+<li>在 <code>chmod +x</code> 之前，<code>ls -l check.sh</code> 的权限通常为 <code>-rw-r--r--</code>，<strong>缺少可执行权限位 <code>x</code></strong>。当你直接用 <code>./check.sh</code> 方式要求操作系统内核启动该文件时，内核会检查权限位，没有 <code>x</code> 就会拒绝执行并报 <code>Permission denied</code>。</li>
+<li>执行 <code>chmod +x check.sh</code> 后，权限变为 <code>-rwxr-xr-x</code>（增加了 <code>x</code> 位），内核才允许直接执行它，并读取首行的 shebang <code>#!/bin/bash</code> 来启动 Bash 运行脚本内容。</li>
+</ul></li>
+</ol>
+<h3 id="set--x-的作用" class="anchored">10. <code>set -x</code> 的作用</h3>
+<p>在脚本中加入 <code>set -x</code>（或以 <code>bash -x script.sh</code> 运行）会开启 Bash 的<strong>执行跟踪（xtrace）调试模式</strong>。它会在每条命令实际执行前，将经过<strong>变量替换、通配符展开、命令替换</strong>后的最终完整命令打印到标准错误（stderr），并在行首加上 <code>$PS4</code> 的值（默认为 <code>+</code>）。</p>
+<p><strong>示例脚本（<code>demo.sh</code>）</strong>：</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb45"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb45-1"><a href="#cb45-1" aria-hidden="true" tabindex="-1"></a><span class="co">#!/bin/bash</span></span>
+<span id="cb45-2"><a href="#cb45-2" aria-hidden="true" tabindex="-1"></a><span class="bu">set</span> <span class="at">-x</span></span>
+<span id="cb45-3"><a href="#cb45-3" aria-hidden="true" tabindex="-1"></a><span class="va">name</span><span class="op">=</span><span class="st">"World"</span></span>
+<span id="cb45-4"><a href="#cb45-4" aria-hidden="true" tabindex="-1"></a><span class="bu">echo</span> <span class="st">"Hello, </span><span class="va">$name</span><span class="st">"</span></span></code></pre></div><button title="复制到剪贴板" class="code-copy-button"><i class="bi"></i></button></div>
+<p><strong>运行输出</strong>：</p>
+<pre class="text"><code>+ name=World
++ echo 'Hello, World'
+Hello, World</code></pre>
+<h3 id="复制为带当天日期的备份文件名" class="anchored">11. 复制为带当天日期的备份文件名</h3>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb47"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb47-1"><a href="#cb47-1" aria-hidden="true" tabindex="-1"></a><span class="fu">cp</span> notes.txt <span class="st">"notes_</span><span class="va">$(</span><span class="fu">date</span> +%Y-%m-%d<span class="va">)</span><span class="st">.txt"</span></span></code></pre></div><button title="复制到剪贴板" class="code-copy-button"><i class="bi"></i></button></div>
+<h3 id="修改-flaky-test-脚本以从命令行参数接收测试命令" class="anchored">12. 修改 flaky test 脚本以从命令行参数接收测试命令</h3>
+<p>使用 <code>"$@"</code> 接收从命令行传入的完整测试命令及其所有参数（不要用 <code>$1</code>，因为测试命令如 <code>cargo test my_test</code> 通常包含多个以空格分隔的参数；用 <code>"$@"</code> 才能完整保留各个参数边界）：</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb48"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb48-1"><a href="#cb48-1" aria-hidden="true" tabindex="-1"></a><span class="co">#!/bin/bash</span></span>
+<span id="cb48-2"><a href="#cb48-2" aria-hidden="true" tabindex="-1"></a><span class="bu">set</span> <span class="at">-euo</span> pipefail</span>
+<span id="cb48-3"><a href="#cb48-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb48-4"><a href="#cb48-4" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> <span class="bu">[</span> <span class="st">"</span><span class="va">$#</span><span class="st">"</span> <span class="ot">-eq</span> 0 <span class="bu">]</span><span class="kw">;</span> <span class="cf">then</span></span>
+<span id="cb48-5"><a href="#cb48-5" aria-hidden="true" tabindex="-1"></a>    <span class="bu">echo</span> <span class="st">"Usage: </span><span class="va">$0</span><span class="st"> &lt;test-command&gt; [args...]"</span></span>
+<span id="cb48-6"><a href="#cb48-6" aria-hidden="true" tabindex="-1"></a>    <span class="bu">exit</span> 1</span>
+<span id="cb48-7"><a href="#cb48-7" aria-hidden="true" tabindex="-1"></a><span class="cf">fi</span></span>
+<span id="cb48-8"><a href="#cb48-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb48-9"><a href="#cb48-9" aria-hidden="true" tabindex="-1"></a><span class="co"># Start CPU stress in background</span></span>
+<span id="cb48-10"><a href="#cb48-10" aria-hidden="true" tabindex="-1"></a><span class="ex">stress</span> <span class="at">--cpu</span> 8 <span class="kw">&amp;</span></span>
+<span id="cb48-11"><a href="#cb48-11" aria-hidden="true" tabindex="-1"></a><span class="va">STRESS_PID</span><span class="op">=</span><span class="va">$!</span></span>
+<span id="cb48-12"><a href="#cb48-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb48-13"><a href="#cb48-13" aria-hidden="true" tabindex="-1"></a><span class="co"># Setup log file</span></span>
+<span id="cb48-14"><a href="#cb48-14" aria-hidden="true" tabindex="-1"></a><span class="va">LOGFILE</span><span class="op">=</span><span class="st">"test_runs_</span><span class="va">$(</span><span class="fu">date</span> +%s<span class="va">)</span><span class="st">.log"</span></span>
+<span id="cb48-15"><a href="#cb48-15" aria-hidden="true" tabindex="-1"></a><span class="bu">echo</span> <span class="st">"Logging to </span><span class="va">$LOGFILE</span><span class="st">"</span></span>
+<span id="cb48-16"><a href="#cb48-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb48-17"><a href="#cb48-17" aria-hidden="true" tabindex="-1"></a><span class="co"># Run tests until one fails</span></span>
+<span id="cb48-18"><a href="#cb48-18" aria-hidden="true" tabindex="-1"></a><span class="va">RUN</span><span class="op">=</span>1</span>
+<span id="cb48-19"><a href="#cb48-19" aria-hidden="true" tabindex="-1"></a><span class="cf">while</span> <span class="st">"</span><span class="va">$@</span><span class="st">"</span> <span class="op">&gt;</span> <span class="st">"</span><span class="va">$LOGFILE</span><span class="st">"</span> <span class="dv">2</span><span class="op">&gt;&amp;</span><span class="dv">1</span><span class="kw">;</span> <span class="cf">do</span></span>
+<span id="cb48-20"><a href="#cb48-20" aria-hidden="true" tabindex="-1"></a>    <span class="bu">echo</span> <span class="st">"Run </span><span class="va">$RUN</span><span class="st"> passed"</span></span>
+<span id="cb48-21"><a href="#cb48-21" aria-hidden="true" tabindex="-1"></a>    <span class="kw">((</span><span class="va">RUN</span><span class="op">++</span><span class="kw">))</span></span>
+<span id="cb48-22"><a href="#cb48-22" aria-hidden="true" tabindex="-1"></a><span class="cf">done</span></span>
+<span id="cb48-23"><a href="#cb48-23" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb48-24"><a href="#cb48-24" aria-hidden="true" tabindex="-1"></a><span class="co"># Cleanup and report</span></span>
+<span id="cb48-25"><a href="#cb48-25" aria-hidden="true" tabindex="-1"></a><span class="bu">kill</span> <span class="st">"</span><span class="va">$STRESS_PID</span><span class="st">"</span></span>
+<span id="cb48-26"><a href="#cb48-26" aria-hidden="true" tabindex="-1"></a><span class="bu">echo</span> <span class="st">"Test failed on run </span><span class="va">$RUN</span><span class="st">"</span></span>
+<span id="cb48-27"><a href="#cb48-27" aria-hidden="true" tabindex="-1"></a><span class="bu">echo</span> <span class="st">"Last 20 lines of output:"</span></span>
+<span id="cb48-28"><a href="#cb48-28" aria-hidden="true" tabindex="-1"></a><span class="fu">tail</span> <span class="at">-n</span> 20 <span class="st">"</span><span class="va">$LOGFILE</span><span class="st">"</span></span>
+<span id="cb48-29"><a href="#cb48-29" aria-hidden="true" tabindex="-1"></a><span class="bu">echo</span> <span class="st">"Full log: </span><span class="va">$LOGFILE</span><span class="st">"</span></span></code></pre></div><button title="复制到剪贴板" class="code-copy-button"><i class="bi"></i></button></div>
+<p><strong>运行示例</strong>：<code>./flaky.sh cargo test my_test</code></p>
+<h3 id="统计-home-目录中最常见的-5-种文件扩展名" class="anchored">13. 统计 home 目录中最常见的 5 种文件扩展名</h3>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb49"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb49-1"><a href="#cb49-1" aria-hidden="true" tabindex="-1"></a><span class="fu">find</span> <span class="st">"</span><span class="va">$HOME</span><span class="st">"</span> <span class="at">-type</span> f <span class="dv">2</span><span class="op">&gt;</span>/dev/null <span class="dt">\</span></span>
+<span id="cb49-2"><a href="#cb49-2" aria-hidden="true" tabindex="-1"></a>  <span class="kw">|</span> <span class="fu">awk</span> <span class="at">-F</span>/ <span class="st">'{print $NF}'</span> <span class="dt">\</span></span>
+<span id="cb49-3"><a href="#cb49-3" aria-hidden="true" tabindex="-1"></a>  <span class="kw">|</span> <span class="fu">awk</span> <span class="at">-F.</span> <span class="st">'NF&gt;1 &amp;&amp; $1!="" {print $NF}'</span> <span class="dt">\</span></span>
+<span id="cb49-4"><a href="#cb49-4" aria-hidden="true" tabindex="-1"></a>  <span class="kw">|</span> <span class="fu">sort</span> <span class="dt">\</span></span>
+<span id="cb49-5"><a href="#cb49-5" aria-hidden="true" tabindex="-1"></a>  <span class="kw">|</span> <span class="fu">uniq</span> <span class="at">-c</span> <span class="dt">\</span></span>
+<span id="cb49-6"><a href="#cb49-6" aria-hidden="true" tabindex="-1"></a>  <span class="kw">|</span> <span class="fu">sort</span> <span class="at">-nr</span> <span class="dt">\</span></span>
+<span id="cb49-7"><a href="#cb49-7" aria-hidden="true" tabindex="-1"></a>  <span class="kw">|</span> <span class="fu">head</span> <span class="at">-n</span> 5</span></code></pre></div><button title="复制到剪贴板" class="code-copy-button"><i class="bi"></i></button></div>
+<p><strong>逐段解析</strong>：</p>
+<ol type="1">
+<li><code>find "$HOME" -type f 2&gt;/dev/null</code>：递归找出 <code>$HOME</code> 下所有普通文件，忽略无权限访问目录的报错。</li>
+<li><code>awk -F/ '{print $NF}'</code>：只取路径最后一部分（纯文件名），避免目录名里带 <code>.</code>（如 <code>.config/</code>）造成干扰。</li>
+<li><code>awk -F. 'NF&gt;1 &amp;&amp; $1!="" {print $NF}'</code>：按 <code>.</code> 分隔，只保留有扩展名且不是纯隐藏配置文件（如 <code>.bashrc</code>）的文件，输出最后一个字段（扩展名）。</li>
+<li><code>sort | uniq -c | sort -nr | head -n 5</code>：排序 → 合并去重并计数 → 按次数从大到小数值排序 → 取前 5 名。</li>
+</ol>
+<h3 id="find-xargs-统计所有-.sh-文件行数含空格处理" class="anchored">14. <code>find</code> + <code>xargs</code> 统计所有 <code>.sh</code> 文件行数（含空格处理）</h3>
+<p><strong>加分项版本（安全处理含空格或特殊字符的文件名）</strong>：</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb50"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb50-1"><a href="#cb50-1" aria-hidden="true" tabindex="-1"></a><span class="fu">find</span> . <span class="at">-type</span> f <span class="at">-name</span> <span class="st">'*.sh'</span> <span class="at">-print0</span> <span class="kw">|</span> <span class="fu">xargs</span> <span class="at">-0</span> wc <span class="at">-l</span></span></code></pre></div><button title="复制到剪贴板" class="code-copy-button"><i class="bi"></i></button></div>
+<p><strong>原理</strong>：<code>find</code> 的 <code>-print0</code> 会用空字符 <code>NUL</code>（<code>\0</code>）而非换行符分隔每个路径；<code>xargs -0</code> 则以 <code>\0</code> 为分隔符解析输入，因此文件名中的空格不会导致参数被错误拆开。两者必须成对使用——只改一边，空格文件名仍会被拆开。</p>
+<h3 id="curl-grep-统计课程网站列出了多少讲" class="anchored">15. <code>curl</code> + <code>grep</code> 统计课程网站列出了多少讲</h3>
+<p>先查看 HTML 中 2026 年课程链接的规律（每一讲都包含 <code>/2026/&lt;主题&gt;/</code> 形式的路径，或 <code>1/xx/26:</code> 形式的日期），然后用 <code>grep</code> 统计行数：</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb51"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb51-1"><a href="#cb51-1" aria-hidden="true" tabindex="-1"></a><span class="ex">curl</span> <span class="at">-s</span> https://missing.csail.mit.edu/ <span class="kw">|</span> <span class="fu">grep</span> <span class="at">-oE</span> <span class="st">'/2026/[a-z-]+/'</span> <span class="kw">|</span> <span class="fu">wc</span> <span class="at">-l</span></span></code></pre></div><button title="复制到剪贴板" class="code-copy-button"><i class="bi"></i></button></div>
+<p>或直接用 <code>grep -cE</code>：</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb52"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb52-1"><a href="#cb52-1" aria-hidden="true" tabindex="-1"></a><span class="ex">curl</span> <span class="at">-s</span> https://missing.csail.mit.edu/ <span class="kw">|</span> <span class="fu">grep</span> <span class="at">-cE</span> <span class="st">'/2026/[a-z-]+/'</span></span></code></pre></div><button title="复制到剪贴板" class="code-copy-button"><i class="bi"></i></button></div>
+<p>对于 2026 届课程，结果为 <strong><code>9</code></strong>（共 9 讲）。</p>
+<h3 id="curl-jq-提取-version-6-的姓名" class="anchored">16. <code>curl</code> + <code>jq</code> 提取 <code>version &gt; 6</code> 的姓名</h3>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb53"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb53-1"><a href="#cb53-1" aria-hidden="true" tabindex="-1"></a><span class="ex">curl</span> <span class="at">-s</span> https://microsoftedge.github.io/Demos/json-dummy-data/64KB.json <span class="dt">\</span></span>
+<span id="cb53-2"><a href="#cb53-2" aria-hidden="true" tabindex="-1"></a>  <span class="kw">|</span> <span class="ex">jq</span> <span class="at">-r</span> <span class="st">'.[] | select(.version &gt; 6) | .name'</span></span></code></pre></div><button title="复制到剪贴板" class="code-copy-button"><i class="bi"></i></button></div>
+<p>（注：<code>.[]</code> 展开 JSON 数组，<code>select(.version &gt; 6)</code> 过滤元素，<code>.name</code> 提取姓名字段；加上 <code>-r</code> 可输出不带双引号的纯文本姓名。）</p>
+<h3 id="awk-过滤第二列大于-100-的行并交换第一三列" class="anchored">17. <code>awk</code> 过滤第二列大于 100 的行并交换第一、三列</h3>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb54"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb54-1"><a href="#cb54-1" aria-hidden="true" tabindex="-1"></a><span class="bu">printf</span> <span class="st">'a 50 x\nb 150 y\nc 200 z\n'</span> <span class="kw">|</span> <span class="fu">awk</span> <span class="st">'$2 &gt; 100 {t=$1; $1=$3; $3=t; print}'</span></span></code></pre></div><button title="复制到剪贴板" class="code-copy-button"><i class="bi"></i></button></div>
+<p>（或者直接指定列顺序输出：<code>awk '$2 &gt; 100 {print $3, $2, $1}'</code>）</p>
+<p><strong>输出</strong>：</p>
+<pre class="text"><code>y 150 b
+z 200 c</code></pre>
+<h3 id="拆解-ssh-日志处理管道-统计最常使用的-shell-命令" class="anchored">18. 拆解 SSH 日志处理管道 &amp; 统计最常使用的 Shell 命令</h3>
+<h4 id="第一部分ssh-日志处理管道拆解" class="anchored">第一部分：SSH 日志处理管道拆解</h4>
+<ol type="1">
+<li><code>ssh myserver 'journalctl -u sshd -b-1 | grep "Disconnected from"'</code> 通过 SSH 登录远程主机 <code>myserver</code>，查看上次启动期间（<code>-b-1</code>）<code>sshd</code> 服务的日志，筛选出包含 <code>"Disconnected from"</code> 的行。</li>
+<li><code>| sed -E 's/.*Disconnected from .* user (.*) [^ ]+ port.*/\1/'</code> 开启扩展正则表达式（<code>-E</code>），匹配断开连接日志的整行内容，使用捕获组 <code>(.*)</code> 提取出 <code>user</code> 之后、IP 地址（<code>[^ ]+</code> 表示一段非空格字符）之前的用户名，并将整行替换为该用户名 <code>\1</code>。</li>
+<li><code>| sort | uniq -c</code> 先按字典序排序（使相同的用户名连续排列，这是 <code>uniq</code> 正常去重的前提），再用 <code>uniq -c</code> 合并连续重复的用户名，并在每行前加上出现次数。</li>
+<li><code>| sort -nk1,1 | tail -n10</code> 按第 1 列（<code>-k1,1</code>）的数值大小（<code>-n</code>）升序排序，然后取最后 10 行（即出现次数最多的前 10 个用户名）。</li>
+<li><code>| awk '{print $2}' | paste -sd,</code> 用 <code>awk</code> 只提取第 2 列（去掉前面的计数，只保留用户名），最后用 <code>paste -sd,</code> 将多行合并为一行，并以逗号 <code>,</code> 分隔输出。</li>
+</ol>
+<h4 id="第二部分统计-.bash_history-最常用的-shell-命令" class="anchored">第二部分：统计 <code>~/.bash_history</code> 最常用的 Shell 命令</h4>
+<ul>
+<li><p><strong>Bash（<code>~/.bash_history</code>）</strong>：</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb56"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb56-1"><a href="#cb56-1" aria-hidden="true" tabindex="-1"></a><span class="fu">awk</span> <span class="st">'{print $1}'</span> ~/.bash_history <span class="kw">|</span> <span class="fu">sort</span> <span class="kw">|</span> <span class="fu">uniq</span> <span class="at">-c</span> <span class="kw">|</span> <span class="fu">sort</span> <span class="at">-nr</span> <span class="kw">|</span> <span class="fu">head</span> <span class="at">-n</span> 10</span></code></pre></div><button title="复制到剪贴板" class="code-copy-button"><i class="bi"></i></button></div></li>
+<li><p><strong>ZSH（若 <code>~/.zsh_history</code> 开启了带时间戳的扩展历史格式，如 <code>: 1700000000:0;git status</code>）</strong>：</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb57"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb57-1"><a href="#cb57-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sed</span> <span class="at">-E</span> <span class="st">'s/^: [0-9]+:[0-9]+;//'</span> ~/.zsh_history <span class="dt">\</span></span>
+<span id="cb57-2"><a href="#cb57-2" aria-hidden="true" tabindex="-1"></a>  <span class="kw">|</span> <span class="fu">awk</span> <span class="st">'{print $1}'</span> <span class="dt">\</span></span>
+<span id="cb57-3"><a href="#cb57-3" aria-hidden="true" tabindex="-1"></a>  <span class="kw">|</span> <span class="fu">sort</span> <span class="kw">|</span> <span class="fu">uniq</span> <span class="at">-c</span> <span class="kw">|</span> <span class="fu">sort</span> <span class="at">-nr</span> <span class="kw">|</span> <span class="fu">head</span> <span class="at">-n</span> 10</span></code></pre></div><button title="复制到剪贴板" class="code-copy-button"><i class="bi"></i></button></div></li>
+</ul>
+
+
+</main>
+<script id="quarto-html-after-body" type="application/javascript">
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+    const tabsets =  window.document.querySelectorAll(".panel-tabset-tabby")
+    tabsets.forEach(function(tabset) {
+      const tabby = new Tabby('#' + tabset.id);
+    });
+    const icon = "";
+    const anchorJS = new window.AnchorJS();
+    anchorJS.options = {
+      placement: 'right',
+      icon: icon
+    };
+    anchorJS.add('.anchored');
+    const isCodeAnnotation = (el) => {
+      for (const clz of el.classList) {
+        if (clz.startsWith('code-annotation-')) {                     
+          return true;
+        }
+      }
+      return false;
+    }
+    const onCopySuccess = function(e) {
+      // button target
+      const button = e.trigger;
+      // don't keep focus
+      button.blur();
+      // flash "checked"
+      button.classList.add('code-copy-button-checked');
+      var currentTitle = button.getAttribute("title");
+      button.setAttribute("title", "已复制");
+      let tooltip;
+      if (window.bootstrap) {
+        button.setAttribute("data-bs-toggle", "tooltip");
+        button.setAttribute("data-bs-placement", "left");
+        button.setAttribute("data-bs-title", "已复制");
+        tooltip = new bootstrap.Tooltip(button, 
+          { trigger: "manual", 
+            customClass: "code-copy-button-tooltip",
+            offset: [0, -8]});
+        tooltip.show();    
+      }
+      setTimeout(function() {
+        if (tooltip) {
+          tooltip.hide();
+          button.removeAttribute("data-bs-title");
+          button.removeAttribute("data-bs-toggle");
+          button.removeAttribute("data-bs-placement");
+        }
+        button.setAttribute("title", currentTitle);
+        button.classList.remove('code-copy-button-checked');
+      }, 1000);
+      // clear code selection
+      e.clearSelection();
+    }
+    const getTextToCopy = function(trigger) {
+      const outerScaffold = trigger.parentElement.cloneNode(true);
+      const codeEl = outerScaffold.querySelector('code');
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+    const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+      text: getTextToCopy
+    });
+    clipboard.on('success', onCopySuccess);
+    if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+      const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+        text: getTextToCopy,
+        container: window.document.getElementById('quarto-embedded-source-code-modal')
+      });
+      clipboardModal.on('success', onCopySuccess);
+    }
+      var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var mailtoRegex = new RegExp(/^mailto:/);
+        var filterRegex = new RegExp("https:\/\/dingtian-feng\.github\.io");
+      var isInternal = (href) => {
+          return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+      }
+      // Inspect non-navigation links and adorn them if external
+      window.quartoDecorateExternalLinks = function (root) {
+     var links = (root || window.document).querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      for (var i=0; i<links.length; i++) {
+        const link = links[i];
+        if (!isInternal(link.href)) {
+          // undo the damage that might have been done by quarto-nav.js in the case of
+          // links that we want to consider external
+          if (link.dataset.originalHref !== undefined) {
+            link.href = link.dataset.originalHref;
+          }
+          if (!link.classList.contains('no-external-icon')) {
+          }
+        }
+      }
+      };
+      window.quartoDecorateExternalLinks(window.document);
+    // Esc closes the popup (WCAG 1.4.13) and focus leaving both trigger and
+    // popup closes it (WCAG 2.4.11); tippy handles neither for interactive popups.
+    const hideOnEscAndFocusOut = {
+      name: 'hideOnEscAndFocusOut',
+      defaultValue: true,
+      fn(instance) {
+        const dismiss = () => {
+          // A show scheduled by the trigger delay would otherwise reopen it
+          instance.clearDelayTimeouts();
+          instance.hide();
+        };
+        const onKeyDown = (event) => {
+          if (event.key !== 'Escape') {
+            return;
+          }
+          // Keep Esc from also reaching page handlers (e.g. reveal.js overview),
+          // except an open reveal.js slide menu, which Esc should close too.
+          // The menu handles keys only when its keyboard option is on.
+          const menuHandlesEsc = window.Reveal?.getPlugin?.('menu')?.isOpen() &&
+            window.Reveal.getConfig().menu?.keyboard !== false;
+          if (!menuHandlesEsc) {
+            event.stopPropagation();
+          }
+          if (instance.popper.contains(window.document.activeElement)) {
+            // Disabled while refocusing so the focus trigger does not reopen it
+            instance.disable();
+            instance.reference.focus();
+            instance.enable();
+          }
+          dismiss();
+        };
+        const onFocusOut = (event) => {
+          const target = event.relatedTarget;
+          if (target && !instance.reference.contains(target) &&
+              !instance.popper.contains(target)) {
+            dismiss();
+          }
+        };
+        // On the trigger too: a click trigger (code-annotations: select) has no
+        // blur handling. Attached for the instance's lifetime so leaving the
+        // trigger also cancels a show still pending on the trigger delay.
+        instance.reference.addEventListener('focusout', onFocusOut);
+        return {
+          onShow() {
+            window.document.addEventListener('keydown', onKeyDown, true);
+            instance.popper.addEventListener('focusout', onFocusOut);
+          },
+          onHide() {
+            window.document.removeEventListener('keydown', onKeyDown, true);
+            instance.popper.removeEventListener('focusout', onFocusOut);
+          },
+          onDestroy() {
+            instance.reference.removeEventListener('focusout', onFocusOut);
+          },
+        };
+      },
+    };
+    function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+      const config = {
+        allowHTML: true,
+        maxWidth: 500,
+        delay: 100,
+        arrow: false,
+        appendTo: function(el) {
+            return el.parentElement;
+        },
+        interactive: true,
+        interactiveBorder: 10,
+        theme: 'light-border',
+        placement: 'bottom-start',
+        plugins: [hideOnEscAndFocusOut],
+      };
+      if (contentFn) {
+        config.content = contentFn;
+      }
+      if (onTriggerFn) {
+        config.onTrigger = onTriggerFn;
+      }
+      if (onUntriggerFn) {
+        config.onUntrigger = onUntriggerFn;
+      }
+      window.tippy(el, config); 
+    }
+    const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+    for (var i=0; i<noterefs.length; i++) {
+      const ref = noterefs[i];
+      tippyHover(ref, function() {
+        // use id or data attribute instead here
+        let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+        try { href = new URL(href).hash; } catch {}
+        const id = href.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note) {
+          return note.innerHTML;
+        } else {
+          return "";
+        }
+      });
+    }
+    const xrefs = window.document.querySelectorAll('a.quarto-xref');
+    const processXRef = (id, note) => {
+      // Strip column container classes
+      const stripColumnClz = (el) => {
+        el.classList.remove("page-full", "page-columns");
+        if (el.children) {
+          for (const child of el.children) {
+            stripColumnClz(child);
+          }
+        }
+      }
+      stripColumnClz(note)
+      if (id === null || id.startsWith('sec-')) {
+        // Special case sections, only their first couple elements
+        const container = document.createElement("div");
+        if (note.children && note.children.length > 2) {
+          container.appendChild(note.children[0].cloneNode(true));
+          for (let i = 1; i < note.children.length; i++) {
+            const child = note.children[i];
+            if (child.tagName === "P" && child.innerText === "") {
+              continue;
+            } else {
+              container.appendChild(child.cloneNode(true));
+              break;
+            }
+          }
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(container);
+          }
+          return container.innerHTML
+        } else {
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(note);
+          }
+          return note.innerHTML;
+        }
+      } else {
+        // Remove any anchor links if they are present
+        const anchorLink = note.querySelector('a.anchorjs-link');
+        if (anchorLink) {
+          anchorLink.remove();
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        if (note.classList.contains("callout")) {
+          return note.outerHTML;
+        } else {
+          return note.innerHTML;
+        }
+      }
+    }
+    for (var i=0; i<xrefs.length; i++) {
+      const xref = xrefs[i];
+      tippyHover(xref, undefined, function(instance) {
+        instance.disable();
+        let url = xref.getAttribute('href');
+        let hash = undefined; 
+        if (url.startsWith('#')) {
+          hash = url;
+        } else {
+          try { hash = new URL(url).hash; } catch {}
+        }
+        if (hash) {
+          const id = hash.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note !== null) {
+            try {
+              const html = processXRef(id, note.cloneNode(true));
+              instance.setContent(html);
+            } finally {
+              instance.enable();
+              instance.show();
+            }
+          } else {
+            // See if we can fetch this
+            fetch(url.split('#')[0])
+            .then(res => res.text())
+            .then(html => {
+              const parser = new DOMParser();
+              const htmlDoc = parser.parseFromString(html, "text/html");
+              const note = htmlDoc.getElementById(id);
+              if (note !== null) {
+                const html = processXRef(id, note);
+                instance.setContent(html);
+              } 
+            }).finally(() => {
+              instance.enable();
+              instance.show();
+            });
+          }
+        } else {
+          // See if we can fetch a full url (with no hash to target)
+          // This is a special case and we should probably do some content thinning / targeting
+          fetch(url)
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.querySelector('main.content');
+            if (note !== null) {
+              // This should only happen for chapter cross references
+              // (since there is no id in the URL)
+              // remove the first header
+              if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+                note.children[0].remove();
+              }
+              const html = processXRef(null, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      }, function(instance) {
+      });
+    }
+        let selectedAnnoteEl;
+        const selectorForAnnotation = ( cell, annotation) => {
+          let cellAttr = 'data-code-cell="' + cell + '"';
+          let lineAttr = 'data-code-annotation="' +  annotation + '"';
+          const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+          return selector;
+        }
+        const selectCodeLines = (annoteEl) => {
+          const doc = window.document;
+          const targetCell = annoteEl.getAttribute("data-target-cell");
+          const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+          const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+          const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+          const lineIds = lines.map((line) => {
+            return targetCell + "-" + line;
+          })
+          // Each band is positioned against its own containing block, which is
+          // not the offsetParent of the lines, so place it from client rects.
+          const placeBand = (band, firstEl, lastEl, codeBlock) => {
+            const container = band.offsetParent;
+            if (container === null) {
+              return;
+            }
+            const containerRect = container.getBoundingClientRect();
+            // Reveal.js scales slides with a transform, so convert client
+            // pixels back to the CSS pixels of the container.
+            const scale = containerRect.height / container.offsetHeight || 1;
+            const firstRect = firstEl.getBoundingClientRect();
+            const lastRect = lastEl.getBoundingClientRect();
+            const top = (firstRect.top - containerRect.top) / scale - container.clientTop + container.scrollTop;
+            const height = (lastRect.bottom - firstRect.top) / scale;
+            band.style.top = top - 2 + "px";
+            band.style.height = height + 4 + "px";
+            if (codeBlock) {
+              // Without the copy button wrapper, the containing block is wider
+              // than the code block, so span the code block explicitly.
+              const blockRect = codeBlock.getBoundingClientRect();
+              band.style.left = (blockRect.left - containerRect.left) / scale - container.clientLeft + container.scrollLeft + "px";
+              band.style.width = blockRect.width / scale + "px";
+            }
+          };
+          if (lineIds.length > 0) {
+            const el = window.document.getElementById(lineIds[0]);
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const parent = el.parentElement.parentElement;
+            // cook up a div (if necessary) and position it
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            placeBand(div, el, lastEl, parent.closest("div.sourceCode") || parent);
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            placeBand(gutterDiv, el, lastEl);
+            selectedAnnoteEl = annoteEl;
+          }
+        };
+        const unselectCodeLines = () => {
+          const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+          elementsIds.forEach((elId) => {
+            const div = window.document.getElementById(elId);
+            if (div) {
+              div.remove();
+            }
+          });
+          selectedAnnoteEl = undefined;
+        };
+          // Handle positioning of the toggle
+      window.addEventListener(
+        "resize",
+        throttle(() => {
+          elRect = undefined;
+          if (selectedAnnoteEl) {
+            selectCodeLines(selectedAnnoteEl);
+          }
+        }, 10)
+      );
+      function throttle(fn, ms) {
+      let throttle = false;
+      let timer;
+        return (...args) => {
+          if(!throttle) { // first call gets through
+              fn.apply(this, args);
+              throttle = true;
+          } else { // all the others get throttled
+              if(timer) clearTimeout(timer); // cancel #2
+              timer = setTimeout(() => {
+                fn.apply(this, args);
+                timer = throttle = false;
+              }, ms);
+          }
+        };
+      }
+        // Attach click handler to the DT
+        const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+        for (const annoteDlNode of annoteDls) {
+          annoteDlNode.addEventListener('click', (event) => {
+            const clickedEl = event.target;
+            if (clickedEl !== selectedAnnoteEl) {
+              unselectCodeLines();
+              const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+              if (activeEl) {
+                activeEl.classList.remove('code-annotation-active');
+              }
+              selectCodeLines(clickedEl);
+              clickedEl.classList.add('code-annotation-active');
+            } else {
+              // Unselect the line
+              unselectCodeLines();
+              clickedEl.classList.remove('code-annotation-active');
+            }
+          });
+        }
+    const findCites = (el) => {
+      const parentEl = el.parentElement;
+      if (parentEl) {
+        const cites = parentEl.dataset.cites;
+        if (cites) {
+          return {
+            el,
+            cites: cites.split(' ')
+          };
+        } else {
+          return findCites(el.parentElement)
+        }
+      } else {
+        return undefined;
+      }
+    };
+    var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+    for (var i=0; i<bibliorefs.length; i++) {
+      const ref = bibliorefs[i];
+      const citeInfo = findCites(ref);
+      if (citeInfo) {
+        tippyHover(citeInfo.el, function() {
+          var popup = window.document.createElement('div');
+          citeInfo.cites.forEach(function(cite) {
+            var citeDiv = window.document.createElement('div');
+            citeDiv.classList.add('hanging-indent');
+            citeDiv.classList.add('csl-entry');
+            var biblioDiv = window.document.getElementById('ref-' + cite);
+            if (biblioDiv) {
+              citeDiv.innerHTML = biblioDiv.innerHTML;
+            }
+            popup.appendChild(citeDiv);
+          });
+          return popup.innerHTML;
+        });
+      }
+    }
+  });
+  </script>
+
+
+
+
+</body></html>

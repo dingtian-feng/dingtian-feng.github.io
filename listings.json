@@ -2,6 +2,7 @@
   {
     "listing": "/index.html",
     "items": [
+      "/posts/missing-semester-shell/index.html",
       "/posts/hello/index.html"
     ]
   }
